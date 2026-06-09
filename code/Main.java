@@ -6,10 +6,17 @@ import java.io.FileOutputStream;
 import java.io.File;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import database.DatabaseManager;
 
 public class Main {
     
     public static void main(String[] args) {
+
+        DatabaseManager db = new DatabaseManager();
+
+        db.connect();
+
+        db.disconnect();
         String studentName = "Max Mustermann";
         String gruppenNummer = "18M";
         String pruefungsDatum = "03.02.2026";
