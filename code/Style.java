@@ -59,7 +59,9 @@ public static void styleInfo(JLabel label) {
     label.setFont(BUTTON_FONT);
 }
 
-public static final Dimension
-        SMALL_BUTTON_SIZE =
-        new Dimension(120, 20);
+public static final Dimension BUTTON_SIZE = new Dimension(250, 60);
+
+public static final Dimension SMALL_BUTTON_SIZE = new Dimension(120, 40);
+
+public static final Dimension FIELD_SIZE = new Dimension(300, 35);
 }

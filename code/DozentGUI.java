@@ -134,25 +134,25 @@ public class DozentGUI {
                 BoxLayout.Y_AXIS));
 
 
-        JButton pruefungButton =
-                new JButton("Prüfung anlegen");
+        JButton pruefungButton = new JButton("Prüfung anlegen");
 
-        JButton ergebnisseButton =
-                new JButton("Ergebnisse ansehen");
+        pruefungButton.addActionListener(
+                 e -> new PruefungAnlegenGUI()
+        );
 
-        JButton studentenButton =
-                new JButton("Studenten verwalten");
-                Dimension buttonSize =
-        new Dimension(250, 60);
+        JButton ergebnisseButton = new JButton("Ergebnisse ansehen");
+
+        JButton studentenButton = new JButton("Studenten verwalten");
+        
 
         JLabel actionLabel = new JLabel("Dozentenfunktionen");
         actionLabel.setFont(Style.TITLE_FONT);
         actionLabel.setForeground(Style.PRIMARY);
         actionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        pruefungButton.setPreferredSize(buttonSize);
-        ergebnisseButton.setPreferredSize(buttonSize);
-        studentenButton.setPreferredSize(buttonSize);
+        pruefungButton.setPreferredSize(Style.BUTTON_SIZE);
+        ergebnisseButton.setPreferredSize(Style.BUTTON_SIZE);
+        studentenButton.setPreferredSize(Style.BUTTON_SIZE);
 
         pruefungButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         ergebnisseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -163,19 +163,12 @@ public class DozentGUI {
         Style.styleButton(studentenButton);
         
         rightPanel.add(Box.createVerticalStrut(50));
-
         rightPanel.add(actionLabel);
-
         rightPanel.add(Box.createVerticalStrut(40));
-
         rightPanel.add(pruefungButton);
-
         rightPanel.add(Box.createVerticalStrut(20));
-
         rightPanel.add(ergebnisseButton);
-
         rightPanel.add(Box.createVerticalStrut(20));
-
         rightPanel.add(studentenButton);
 
         
