@@ -1,4 +1,7 @@
 import javax.swing.*;
+
+import model.CurrentUser;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;

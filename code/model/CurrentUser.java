@@ -1,3 +1,4 @@
+package model;
 public class CurrentUser {
 
     private static User currentUser;

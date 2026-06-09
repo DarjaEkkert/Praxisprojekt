@@ -1,4 +1,7 @@
 import javax.swing.*;
+
+import model.CurrentUser;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -44,6 +47,10 @@ JLabel titleLabel =
             + ")"
         );
 
+JButton logoutButton = new JButton("Logout");
+Style.styleButton(logoutButton);
+logoutButton.setPreferredSize(Style.SMALL_BUTTON_SIZE);
+
 userLabel.setFont(Style.BUTTON_FONT);
 userLabel.setForeground(Style.PRIMARY);
 
@@ -75,7 +82,6 @@ JButton uploadButton = new JButton("Lösung hochladen");
 Style.styleButton(uploadButton);
 JButton startButton = new JButton("Prüfung starten");
 Style.styleButton(startButton);
-
 
 // Timer-Variable
 
@@ -147,10 +153,25 @@ final int[] sekunden = {0};
             }
         });
 
+        logoutButton.addActionListener(
+                new ActionListener() {
+
+            public void actionPerformed(
+                    ActionEvent e) {
+
+                CurrentUser.setCurrentUser(null);
+
+                frame.dispose();
+
+                new LoginGUI();
+             }
+        });
+
 JPanel headerPanel = new JPanel(new BorderLayout());
 
 headerPanel.setBackground(Style.BACKGROUND);
-headerPanel.add(logoLabel, BorderLayout.EAST);
+headerPanel.add(logoutButton,BorderLayout.WEST);
+headerPanel.add(logoLabel,BorderLayout.EAST);
 
 
 JPanel buttonPanel = new JPanel(new BorderLayout());
@@ -168,11 +189,16 @@ buttonPanel.add(topButtonPanel, BorderLayout.NORTH);
 buttonPanel.add(timerLabel, BorderLayout.CENTER);
 timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
+JPanel userPanel = new JPanel( new FlowLayout( FlowLayout.LEFT));
+userPanel.setBackground( Style.BACKGROUND);
+userPanel.add(userLabel);
+userPanel.add(logoutButton);
+
 JPanel centerPanel = new JPanel(new BorderLayout());
 
 centerPanel.setBackground(Style.BACKGROUND);
 
-centerPanel.add(userLabel, BorderLayout.NORTH);
+centerPanel.add(userPanel, BorderLayout.NORTH);
 centerPanel.add(buttonPanel, BorderLayout.CENTER);
 
 frame.add(headerPanel, BorderLayout.NORTH);

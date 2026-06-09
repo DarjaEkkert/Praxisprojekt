@@ -5,6 +5,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Image;
+import java.awt.Dimension;
 
 public class Style {
 
@@ -57,4 +58,8 @@ public static void styleInfo(JLabel label) {
     label.setForeground(PRIMARY);
     label.setFont(BUTTON_FONT);
 }
+
+public static final Dimension
+        SMALL_BUTTON_SIZE =
+        new Dimension(120, 20);
 }

@@ -1,5 +1,10 @@
 import javax.swing.*;
+
+import model.CurrentUser;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class DozentGUI {
 
@@ -28,6 +33,28 @@ public class DozentGUI {
                                 + " ("
                                 + CurrentUser.getCurrentUser().getRole()
                                 + ")");
+        JButton logoutButton = new JButton("Logout");
+        Style.styleButton(logoutButton);
+        logoutButton.setPreferredSize(Style.SMALL_BUTTON_SIZE);
+
+        logoutButton.addActionListener(
+                new ActionListener() {
+
+                public void actionPerformed( ActionEvent e) {
+
+                CurrentUser.setCurrentUser(null);
+
+                frame.dispose();
+
+                new LoginGUI();
+        }
+        });
+
+        JPanel userPanel = new JPanel( new FlowLayout( FlowLayout.LEFT));
+
+        userPanel.setBackground( Style.BACKGROUND);
+        userPanel.add(userLabel);
+        userPanel.add(logoutButton);
 
         userLabel.setFont(Style.BUTTON_FONT);
         userLabel.setForeground(Style.PRIMARY);
@@ -36,17 +63,9 @@ public class DozentGUI {
 
         JPanel headerPanel =new JPanel(new BorderLayout());
 
-        headerPanel.setBackground(Style.BACKGROUND);
-
-        headerPanel.add(userLabel,BorderLayout.WEST);
-
-        headerPanel.add(logoLabel,BorderLayout.EAST);
-
-        headerPanel.setBackground(Style.BACKGROUND);
-
-        headerPanel.add(userLabel,BorderLayout.WEST);
-
-        headerPanel.add(logoLabel,BorderLayout.EAST);
+        headerPanel.setBackground( Style.BACKGROUND);
+        headerPanel.add( userPanel, BorderLayout.WEST);
+        headerPanel.add(logoLabel,  BorderLayout.EAST);
 
         
         // Linke Seite
@@ -172,10 +191,7 @@ public class DozentGUI {
         splitPane.setDividerLocation(330);
 
         frame.add(headerPanel,BorderLayout.NORTH);
-
         frame.add(splitPane,BorderLayout.CENTER);
-        frame.add(headerPanel,BorderLayout.NORTH);
-
         frame.setLocationRelativeTo(null);
 
         frame.setVisible(true);

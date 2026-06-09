@@ -1,37 +1,37 @@
+import model.Role;
+import model.User;
+
 import java.util.ArrayList;
-import java.util.List;
+
+import database.DatabaseManager;
+import database.UserRepository;
 
 public class UserService {
 
-    private List<User> users;
+    private UserRepository userRepository;
 
     public UserService() {
 
-        users = new ArrayList<>();
+        DatabaseManager databaseManager = new DatabaseManager();
 
-        users.add(
-                new User(
-                        "student",
-                        "1234",
-                        Role.STUDENT));
+        databaseManager.connect();
 
-        users.add(
-                new User(
-                        "dozent",
-                        "1234",
-                        Role.DOZENT));
-    }
+        userRepository = new UserRepository(databaseManager);
+}
 
     public User login(String username,
                       String password) {
 
-        for (User user : users) {
+        User user =
+        userRepository
+                .getUserByUsername(
+                        username);
 
-            if (user.getUsername().equals(username)
-                    && user.getPassword().equals(password)) {
+        if (user != null
+                && user.getPassword()
+                    .equals(password)) {
 
-                return user;
-            }
+            return user;
         }
 
         return null;

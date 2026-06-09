@@ -1,4 +1,9 @@
 import javax.swing.*;
+
+import model.CurrentUser;
+import model.Role;
+import model.User;
+
 import java.awt.*;
 import java.awt.event.*;
 

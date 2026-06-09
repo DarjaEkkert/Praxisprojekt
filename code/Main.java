@@ -7,6 +7,9 @@ import java.io.File;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import database.DatabaseManager;
+import database.UserRepository;
+
+import model.User;
 
 public class Main {
     
@@ -16,6 +19,19 @@ public class Main {
 
         db.connect();
 
+        UserRepository repository =
+                new UserRepository(db);
+
+        User user =
+                repository.getUserByUsername(
+                        "student");
+
+        System.out.println(
+                user.getUsername());
+
+        System.out.println(
+                user.getRole());
+                
         db.disconnect();
         String studentName = "Max Mustermann";
         String gruppenNummer = "18M";
