@@ -15,24 +15,21 @@ public class Main {
     
     public static void main(String[] args) {
 
-        DatabaseManager db = new DatabaseManager();
+       DatabaseManager db = new DatabaseManager();
 
         db.connect();
+        
 
-        UserRepository repository =
-                new UserRepository(db);
+        UserRepository repository = new UserRepository(db);
 
-        User user =
-                repository.getUserByUsername(
-                        "student");
+        User user = repository.getUserByUsername( "student");
 
-        System.out.println(
-                user.getUsername());
+        System.out.println( user.getUsername());
 
-        System.out.println(
-                user.getRole());
+        System.out.println( user.getRole());
                 
-        db.disconnect();
+        db.disconnect(); 
+
         String studentName = "Max Mustermann";
         String gruppenNummer = "18M";
         String pruefungsDatum = "03.02.2026";

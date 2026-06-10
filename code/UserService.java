@@ -9,10 +9,12 @@ import database.UserRepository;
 public class UserService {
 
     private UserRepository userRepository;
+    private DatabaseManager databaseManager;
+    
 
     public UserService() {
 
-        DatabaseManager databaseManager = new DatabaseManager();
+        databaseManager = new DatabaseManager();
 
         databaseManager.connect();
 
@@ -30,10 +32,11 @@ public class UserService {
         if (user != null
                 && user.getPassword()
                     .equals(password)) {
-
+            databaseManager.disconnect();
             return user;
         }
 
+        databaseManager.disconnect();
         return null;
     }
 }

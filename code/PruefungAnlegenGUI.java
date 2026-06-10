@@ -1,7 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import database.DatabaseManager;
+import database.PruefungsRepository;
+import model.Pruefung;
 
 public class PruefungAnlegenGUI {
+
+        private String aufgabenPfad;
+        private String loesungsPfad;
+        private String teilnehmerPfad;
 
     public PruefungAnlegenGUI() {
 
@@ -63,6 +70,9 @@ aufgabeButton.addActionListener(e -> {
 
     if (result == JFileChooser.APPROVE_OPTION) {
 
+        aufgabenPfad =
+                chooser.getSelectedFile().getAbsolutePath();
+
         aufgabeDateiLabel.setText(
                 chooser.getSelectedFile().getName());
     }
@@ -75,8 +85,11 @@ loesungButton.addActionListener(e -> {
 
     if (result == JFileChooser.APPROVE_OPTION) {
 
-        loesungDateiLabel.setText(
-                chooser.getSelectedFile().getName());
+    loesungsPfad =
+            chooser.getSelectedFile().getAbsolutePath();
+
+    loesungDateiLabel.setText(
+            chooser.getSelectedFile().getName());
     }
 });
 
@@ -88,8 +101,11 @@ teilnehmerButton.addActionListener(e -> {
 
     if (result == JFileChooser.APPROVE_OPTION) {
 
-        teilnehmerDateiLabel.setText(
-                chooser.getSelectedFile().getName());
+    teilnehmerPfad =
+            chooser.getSelectedFile().getAbsolutePath();
+
+    teilnehmerDateiLabel.setText(
+            chooser.getSelectedFile().getName());
     }
 });
 
@@ -98,6 +114,44 @@ teilnehmerButton.addActionListener(e -> {
 
         Style.styleButton(speichernButton);
         Style.styleButton(abbrechenButton);
+
+speichernButton.addActionListener(e -> {
+
+    try {
+
+        Pruefung pruefung = new Pruefung(
+                nameField.getText(),
+                dateField.getText(),
+                gruppeField.getText(),
+                Integer.parseInt(dauerField.getText()),
+                aufgabenPfad,
+                loesungsPfad,
+                teilnehmerPfad);
+
+        DatabaseManager db = new DatabaseManager();
+
+        db.connect();
+
+        PruefungsRepository repository =
+                new PruefungsRepository(db);
+
+        repository.savePruefung(pruefung);
+
+        db.disconnect();
+
+        JOptionPane.showMessageDialog(
+                frame,
+                "Prüfung gespeichert!");
+
+    } catch (Exception ex) {
+
+        ex.printStackTrace();
+
+        JOptionPane.showMessageDialog(
+                frame,
+                "Fehler beim Speichern!");
+    }
+});
 
         formPanel.add(nameLabel);
         formPanel.add(nameField);

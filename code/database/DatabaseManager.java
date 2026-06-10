@@ -107,4 +107,34 @@ public void insertDefaultUsers() {
         e.printStackTrace();
     }
 }
+
+public void createPruefungTable() {
+
+    try {
+
+        Statement statement =
+                connection.createStatement();
+
+        String sql =
+                "CREATE TABLE IF NOT EXISTS pruefungen ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "name TEXT NOT NULL,"
+                + "datum TEXT NOT NULL,"
+                + "gruppe TEXT NOT NULL,"
+                + "dauer INTEGER NOT NULL,"
+                + "aufgabenPfad TEXT NOT NULL,"
+                + "loesungsPfad TEXT NOT NULL,"
+                + "teilnehmerPfad TEXT NOT NULL"
+                + ");";
+
+        statement.execute(sql);
+
+        System.out.println(
+                "Tabelle pruefungen erstellt.");
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+}
 }
