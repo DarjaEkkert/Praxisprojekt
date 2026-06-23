@@ -1,10 +1,15 @@
 import javax.swing.*;
-
 import model.CurrentUser;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import database.DatabaseManager;
+import database.PruefungsRepository;
+import database.PruefungsteilnehmerRepository;
+import model.Pruefung;
+import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class StudentGUI {
 
@@ -20,6 +25,52 @@ frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 frame.setLayout(new BorderLayout());
 frame.getContentPane().setBackground(Style.BACKGROUND);
 
+DatabaseManager db = new DatabaseManager();
+
+db.connect();
+
+PruefungsRepository repository = new PruefungsRepository(db);
+PruefungsteilnehmerRepository teilnehmerRepository = new PruefungsteilnehmerRepository(db);
+String username = CurrentUser.getCurrentUser().getUsername();
+int pruefungId = teilnehmerRepository.getPruefungIdByUsername(username);
+Pruefung aktuellePruefung = repository.getPruefungById(pruefungId);
+
+final Pruefung finalePruefung = aktuellePruefung;
+
+JLabel pruefungTitelLabel = new JLabel("Meine Prüfung");
+JLabel pruefungNameLabel = new JLabel();
+JLabel pruefungDatumLabel = new JLabel();
+JLabel pruefungDauerLabel = new JLabel();
+
+if (aktuellePruefung != null) {
+
+    pruefungNameLabel.setText(
+            "Prüfung: "
+            + aktuellePruefung.getName());
+
+    pruefungDatumLabel.setText(
+            "Datum: "
+            + aktuellePruefung.getDatum());
+
+    pruefungDauerLabel.setText(
+            "Dauer: "
+            + aktuellePruefung.getDauer()
+            + " Minuten");
+}
+pruefungTitelLabel.setFont(
+        Style.TITLE_FONT);
+
+pruefungTitelLabel.setForeground(
+        Style.PRIMARY);
+
+pruefungNameLabel.setFont(
+        Style.BUTTON_FONT);
+
+pruefungDatumLabel.setFont(
+        Style.BUTTON_FONT);
+
+pruefungDauerLabel.setFont(
+        Style.BUTTON_FONT);
 
 // Logo
 
@@ -116,22 +167,29 @@ final int[] sekunden = {0};
         });
         
 
-        startButton.addActionListener(new ActionListener() {
+startButton.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent e) {
-                timer.start();
-                infoLabel.setText("Viel Erfolg!");
-                uploadButton.setEnabled(true);
-                try {
+    public void actionPerformed(ActionEvent e) {
+        timer.start();
+        infoLabel.setText("Viel Erfolg!");
+        uploadButton.setEnabled(true);
+        try {
 
-                    Desktop.getDesktop().open(new File("uploads/aufgabe.xlsx"));
+            if (finalePruefung != null) {
 
-                } catch (Exception ex) {
+                Desktop.getDesktop().open(new File(finalePruefung.getAufgabenPfad()));
 
-                    ex.printStackTrace();
-                }
-            }
-        });
+            } else {
+
+                infoLabel.setText( "Keine Prüfung verfügbar.");
+}
+
+        } catch (Exception ex) {
+
+             ex.printStackTrace();
+        }
+    }
+});
 
         uploadButton.addActionListener(new ActionListener() {
 
@@ -194,12 +252,28 @@ userPanel.setBackground( Style.BACKGROUND);
 userPanel.add(userLabel);
 userPanel.add(logoutButton);
 
+JPanel pruefungPanel = new JPanel();
+
+pruefungPanel.setBackground(Style.BACKGROUND);
+pruefungPanel.setLayout( new BoxLayout(pruefungPanel,BoxLayout.Y_AXIS));
+pruefungTitelLabel.setAlignmentX( Component.CENTER_ALIGNMENT);
+pruefungNameLabel.setAlignmentX( Component.CENTER_ALIGNMENT);
+pruefungDatumLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+pruefungDauerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+pruefungPanel.add(pruefungTitelLabel);
+pruefungPanel.add(Box.createVerticalStrut(10));
+pruefungPanel.add(pruefungNameLabel);
+pruefungPanel.add(pruefungDatumLabel);
+pruefungPanel.add(pruefungDauerLabel);
+
 JPanel centerPanel = new JPanel(new BorderLayout());
 
 centerPanel.setBackground(Style.BACKGROUND);
 
 centerPanel.add(userPanel, BorderLayout.NORTH);
-centerPanel.add(buttonPanel, BorderLayout.CENTER);
+centerPanel.add(pruefungPanel, BorderLayout.CENTER);
+centerPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 frame.add(headerPanel, BorderLayout.NORTH);
 frame.add(centerPanel, BorderLayout.CENTER);

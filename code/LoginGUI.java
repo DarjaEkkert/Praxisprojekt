@@ -1,5 +1,6 @@
 import javax.swing.*;
 
+import database.DatabaseManager;
 import model.CurrentUser;
 import model.Role;
 import model.User;
@@ -174,6 +175,16 @@ public class LoginGUI {
     }
 
     public static void main(String[] args) {
+
+        DatabaseManager db = new DatabaseManager();
+
+        db.connect();
+
+        db.createUserTable();
+        db.createPruefungTable();
+        db.createPruefungsteilnehmerTable();
+
+        db.disconnect();
 
         new LoginGUI();
     }

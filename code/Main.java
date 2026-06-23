@@ -18,14 +18,10 @@ public class Main {
        DatabaseManager db = new DatabaseManager();
 
         db.connect();
-        
-
+                
         UserRepository repository = new UserRepository(db);
-
         User user = repository.getUserByUsername( "student");
-
         System.out.println( user.getUsername());
-
         System.out.println( user.getRole());
                 
         db.disconnect(); 

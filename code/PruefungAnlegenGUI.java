@@ -121,6 +121,7 @@ speichernButton.addActionListener(e -> {
     try {
 
         Pruefung pruefung = new Pruefung(
+                0,
                 nameField.getText(),
                 dateField.getText(),
                 gruppeField.getText(),
@@ -137,7 +138,13 @@ speichernButton.addActionListener(e -> {
                 new PruefungsRepository(db);
 
         repository.savePruefung(pruefung);
-        TeilnehmerService.leseTeilnehmerliste(teilnehmerPfad);
+
+        int pruefungId = repository.getLetztePruefungId();
+
+        db.disconnect();
+        TeilnehmerService.leseTeilnehmerliste(
+                teilnehmerPfad,
+                pruefungId);
         
 
         nameField.setText("");
@@ -153,7 +160,7 @@ speichernButton.addActionListener(e -> {
         loesungsPfad = null;
         teilnehmerPfad = null;
 
-        db.disconnect();
+        
 
         JOptionPane.showMessageDialog(
                 frame,

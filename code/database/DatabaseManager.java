@@ -137,4 +137,28 @@ public void createPruefungTable() {
         e.printStackTrace();
     }
 }
+public void createPruefungsteilnehmerTable() {
+
+    try {
+
+        Statement statement =
+                connection.createStatement();
+
+        String sql =
+                "CREATE TABLE IF NOT EXISTS pruefungsteilnehmer ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "pruefung_id INTEGER NOT NULL,"
+                + "username TEXT NOT NULL"
+                + ");";
+
+        statement.execute(sql);
+
+        System.out.println(
+                "Tabelle pruefungsteilnehmer erstellt.");
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+}
 }

@@ -3,6 +3,7 @@ import java.util.Random;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import database.DatabaseManager;
+import database.PruefungsteilnehmerRepository;
 import database.UserRepository;
 import model.User;
 import model.Role;
@@ -10,20 +11,18 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 public class TeilnehmerService {
 
-    public static void leseTeilnehmerliste(String dateipfad) {
+    public static void leseTeilnehmerliste(String dateipfad, int pruefungId) {
 
         try {
 
-            FileInputStream file =
-                    new FileInputStream(dateipfad);
+            FileInputStream file = new FileInputStream(dateipfad);
+            XSSFWorkbook workbook = new XSSFWorkbook(file);
+            XSSFSheet sheet =  workbook.getSheetAt(0);
 
-            XSSFWorkbook workbook =
-                    new XSSFWorkbook(file);
-
-            XSSFSheet sheet =
-                    workbook.getSheetAt(0);
-
-            System.out.println("\n--- Teilnehmerliste ---");
+            DatabaseManager db = new DatabaseManager();
+            db.connect();
+            UserRepository userRepository = new UserRepository(db);
+            PruefungsteilnehmerRepository teilnehmerRepository =  new PruefungsteilnehmerRepository(db);
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
 
@@ -32,52 +31,39 @@ public class TeilnehmerService {
                 if (row == null) {
                     continue;
                 }
+                if (row.getCell(0) == null
+                    || row.getCell(1) == null) {
 
-                String vorname =
-                        row.getCell(0).getStringCellValue();
+                    continue;
+                }
 
-                String nachname =
-                        row.getCell(1).getStringCellValue();
+                String vorname = row.getCell(0).getStringCellValue();
+                String nachname = row.getCell(1).getStringCellValue();
 
+                if (vorname.isBlank()
+                    || nachname.isBlank()) {
+
+                    continue;
+                }
                 String username =
                     vorname.toLowerCase()
                     + "."
                     + nachname.toLowerCase();
-
                 String passwort =generierePasswort();
-
-                DatabaseManager db =  new DatabaseManager();
-
-                db.connect();
-
-                UserRepository repository = new UserRepository(db);
-
+                
                 User user =
                     new User(
                         username,
                         passwort,
                         Role.STUDENT);
 
-                repository.saveUser(user);
+                userRepository.saveUser(user);
 
-                db.disconnect();
-
-                System.out.println(
-                    "\n"
-                    + vorname + " "
-                    + nachname);
-
-                System.out.println(
-                    "Benutzername: "
-                    + username);
-
-                System.out.println(
-                    "Passwort: "
-                    + passwort);
+                teilnehmerRepository.saveTeilnehmer(pruefungId, username);
             }
-
             workbook.close();
             file.close();
+            db.disconnect();
 
         } catch (Exception e) {
 

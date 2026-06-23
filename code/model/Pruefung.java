@@ -1,6 +1,7 @@
 package model;
 public class Pruefung {
 
+    private int id;
     private String name;
     private String datum;
     private String gruppe;
@@ -11,6 +12,7 @@ public class Pruefung {
     private String teilnehmerPfad;
 
     public Pruefung(
+            int id,
             String name,
             String datum,
             String gruppe,
@@ -18,7 +20,7 @@ public class Pruefung {
             String aufgabenPfad,
             String loesungsPfad,
             String teilnehmerPfad) {
-
+        this.id = id;
         this.name = name;
         this.datum = datum;
         this.gruppe = gruppe;
@@ -28,6 +30,9 @@ public class Pruefung {
         this.teilnehmerPfad = teilnehmerPfad;
     }
 
+    public int getId() {
+    return id;
+}
     public String getName() {
         return name;
     }

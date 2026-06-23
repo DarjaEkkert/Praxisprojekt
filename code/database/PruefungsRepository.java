@@ -71,6 +71,7 @@ public List<Pruefung> getAllPruefungen() {
 
             Pruefung pruefung =
                     new Pruefung(
+                            result.getInt("id"),
                             result.getString("name"),
                             result.getString("datum"),
                             result.getString("gruppe"),
@@ -88,5 +89,73 @@ public List<Pruefung> getAllPruefungen() {
     }
 
     return pruefungen;
+}
+public int getLetztePruefungId() {
+
+    try {
+
+        String sql =
+                "SELECT MAX(id) AS id "
+                + "FROM pruefungen";
+
+        PreparedStatement statement =
+                databaseManager
+                        .getConnection()
+                        .prepareStatement(sql);
+
+        ResultSet result =
+                statement.executeQuery();
+
+        if (result.next()) {
+
+            return result.getInt("id");
+        }
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+
+    return -1;
+}
+
+public Pruefung getPruefungById(
+        int id) {
+
+    try {
+
+        String sql =
+                "SELECT * FROM pruefungen "
+                + "WHERE id = ?";
+
+        PreparedStatement statement =
+                databaseManager
+                        .getConnection()
+                        .prepareStatement(sql);
+
+        statement.setInt(1, id);
+
+        ResultSet result =
+                statement.executeQuery();
+
+        if (result.next()) {
+
+            return new Pruefung(
+                    result.getInt("id"),
+                    result.getString("name"),
+                    result.getString("datum"),
+                    result.getString("gruppe"),
+                    result.getInt("dauer"),
+                    result.getString("aufgabenPfad"),
+                    result.getString("loesungsPfad"),
+                    result.getString("teilnehmerPfad"));
+        }
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+
+    return null;
 }
 }
