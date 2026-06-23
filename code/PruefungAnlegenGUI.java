@@ -4,6 +4,7 @@ import database.DatabaseManager;
 import database.PruefungsRepository;
 import model.Pruefung;
 
+
 public class PruefungAnlegenGUI {
 
         private String aufgabenPfad;
@@ -136,6 +137,7 @@ speichernButton.addActionListener(e -> {
                 new PruefungsRepository(db);
 
         repository.savePruefung(pruefung);
+        TeilnehmerService.leseTeilnehmerliste(teilnehmerPfad);
         
 
         nameField.setText("");

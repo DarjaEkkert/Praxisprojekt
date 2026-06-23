@@ -61,4 +61,41 @@ public class UserRepository {
 
     return null;
 }
+
+public void saveUser(User user) {
+
+    try {
+
+        String sql =
+                "INSERT INTO users(username, password, role) "
+                + "VALUES (?, ?, ?)";
+
+        PreparedStatement statement =
+                databaseManager
+                        .getConnection()
+                        .prepareStatement(sql);
+
+        statement.setString(
+                1,
+                user.getUsername());
+
+        statement.setString(
+                2,
+                user.getPassword());
+
+        statement.setString(
+                3,
+                user.getRole().name());
+
+        statement.executeUpdate();
+
+        System.out.println(
+                "Benutzer gespeichert: "
+                + user.getUsername());
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+}
 }

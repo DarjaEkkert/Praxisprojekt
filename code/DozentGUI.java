@@ -96,6 +96,26 @@ public class DozentGUI {
 
         List<Pruefung> pruefungen =
                 repository.getAllPruefungen();
+                
+//prüfungen nach Datum sortieren
+        pruefungen.sort((p1, p2) -> {
+
+                DateTimeFormatter formatter =
+                        DateTimeFormatter.ofPattern(
+                                "dd.MM.yyyy");
+
+                LocalDate d1 =
+                        LocalDate.parse(
+                                p1.getDatum(),
+                                formatter);
+
+                LocalDate d2 =
+                        LocalDate.parse(
+                                p2.getDatum(),
+                                formatter);
+
+                return d1.compareTo(d2);
+        });
 
         JLabel vergangeneLabel =
                 new JLabel("Vergangene Prüfungen");
