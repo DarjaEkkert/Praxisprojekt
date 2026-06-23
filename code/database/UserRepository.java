@@ -89,10 +89,6 @@ public void saveUser(User user) {
 
         statement.executeUpdate();
 
-        System.out.println(
-                "Benutzer gespeichert: "
-                + user.getUsername());
-
     } catch (Exception e) {
 
         e.printStackTrace();
