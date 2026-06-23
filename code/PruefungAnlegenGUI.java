@@ -136,6 +136,20 @@ speichernButton.addActionListener(e -> {
                 new PruefungsRepository(db);
 
         repository.savePruefung(pruefung);
+        
+
+        nameField.setText("");
+        dateField.setText("");
+        gruppeField.setText("");
+        dauerField.setText("");
+
+        aufgabeDateiLabel.setText("Keine Datei ausgewählt");
+        loesungDateiLabel.setText("Keine Datei ausgewählt");
+        teilnehmerDateiLabel.setText("Keine Datei ausgewählt");
+
+        aufgabenPfad = null;
+        loesungsPfad = null;
+        teilnehmerPfad = null;
 
         db.disconnect();
 
@@ -150,6 +164,20 @@ speichernButton.addActionListener(e -> {
         JOptionPane.showMessageDialog(
                 frame,
                 "Fehler beim Speichern!");
+    }
+});
+
+abbrechenButton.addActionListener(e -> {
+
+    int antwort = JOptionPane.showConfirmDialog(
+            frame,
+            "Prüfung anlegen schließen?",
+            "Bestätigung",
+            JOptionPane.YES_NO_OPTION);
+
+    if (antwort == JOptionPane.YES_OPTION) {
+
+        frame.dispose();
     }
 });
 
@@ -205,4 +233,7 @@ speichernButton.addActionListener(e -> {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+
+    
 }
+

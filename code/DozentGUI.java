@@ -5,6 +5,13 @@ import model.CurrentUser;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import database.DatabaseManager;
+import database.PruefungsRepository;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import model.Pruefung;
+
+import java.util.List;
 
 public class DozentGUI {
 
@@ -80,21 +87,22 @@ public class DozentGUI {
 
         leftPanel.setBackground(
                 Style.BACKGROUND);
+        DatabaseManager db = new DatabaseManager();
+
+        db.connect();
+
+        PruefungsRepository repository =
+                new PruefungsRepository(db);
+
+        List<Pruefung> pruefungen =
+                repository.getAllPruefungen();
 
         JLabel vergangeneLabel =
                 new JLabel("Vergangene Prüfungen");
 
         DefaultListModel<String> vergangeneModel =
                 new DefaultListModel<>();
-
-        vergangeneModel.addElement(
-                "Excel Test WS25");
-
-        vergangeneModel.addElement(
-                "Excel Test SS26");
-
-        JList<String> vergangeneListe =
-                new JList<>(vergangeneModel);
+        
 
         JLabel geplanteLabel =
                 new JLabel("Geplante Prüfungen");
@@ -102,11 +110,35 @@ public class DozentGUI {
         DefaultListModel<String> geplanteModel =
                 new DefaultListModel<>();
 
-        geplanteModel.addElement(
-                "Excel Abschlussprüfung");
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-        geplanteModel.addElement(
-                "Excel Nachprüfung");
+        LocalDate heute = LocalDate.now();
+
+        for (Pruefung pruefung : pruefungen) {
+
+                LocalDate pruefungsDatum =
+                        LocalDate.parse(
+                                pruefung.getDatum(),
+                                formatter);
+
+                String eintrag =
+                        pruefung.getName()
+                        + " - "
+                        + pruefung.getDatum();
+
+                if (pruefungsDatum.isBefore(heute)) {
+
+                        vergangeneModel.addElement(eintrag);
+
+                } else {
+
+                        geplanteModel.addElement(eintrag);
+                }
+        }
+
+        JList<String> vergangeneListe =
+                new JList<>(vergangeneModel);
 
         JList<String> geplanteListe =
                 new JList<>(geplanteModel);

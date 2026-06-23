@@ -2,6 +2,9 @@ package database;
 
 import java.sql.PreparedStatement;
 import model.Pruefung;
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.ResultSet;
 
 public class PruefungsRepository {
 
@@ -44,5 +47,46 @@ public class PruefungsRepository {
 
         e.printStackTrace();
     }
+}
+
+public List<Pruefung> getAllPruefungen() {
+
+    List<Pruefung> pruefungen =
+            new ArrayList<>();
+
+    try {
+
+        String sql =
+                "SELECT * FROM pruefungen";
+
+        PreparedStatement statement =
+                databaseManager
+                        .getConnection()
+                        .prepareStatement(sql);
+
+        ResultSet result =
+                statement.executeQuery();
+
+        while (result.next()) {
+
+            Pruefung pruefung =
+                    new Pruefung(
+                            result.getString("name"),
+                            result.getString("datum"),
+                            result.getString("gruppe"),
+                            result.getInt("dauer"),
+                            result.getString("aufgabenPfad"),
+                            result.getString("loesungsPfad"),
+                            result.getString("teilnehmerPfad"));
+
+            pruefungen.add(pruefung);
+        }
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+
+    return pruefungen;
 }
 }
