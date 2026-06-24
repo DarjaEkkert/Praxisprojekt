@@ -4,6 +4,7 @@ import database.DatabaseManager;
 import model.CurrentUser;
 import model.Role;
 import model.User;
+import service.PdfService;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -187,5 +188,6 @@ public class LoginGUI {
         db.disconnect();
 
         new LoginGUI();
+;
     }
 }

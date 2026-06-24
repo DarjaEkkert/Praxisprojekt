@@ -92,7 +92,7 @@ JLabel titleLabel =
         JLabel userLabel =
         new JLabel(
             "Angemeldet als: "
-            + CurrentUser.getCurrentUser().getUsername()
+            + CurrentUser.getCurrentUser().getVollerName()
             + " ("
             + CurrentUser.getCurrentUser().getRole()
             + ")"
@@ -122,9 +122,22 @@ timerLabel.setForeground(Style.PRIMARY);
 
 JLabel infoLabel =
         new JLabel("");
-
 infoLabel.setFont(Style.BUTTON_FONT);
 infoLabel.setForeground(Style.PRIMARY);
+
+if (aktuellePruefung != null) {
+
+    if (aktuellePruefung.getStatus().equals("GEPLANT")) {
+
+        infoLabel.setText(
+                "Prüfung wurde noch nicht freigegeben.");
+
+    } else if (aktuellePruefung.getStatus().equals("BEENDET")) {
+
+        infoLabel.setText(
+                "Prüfung wurde bereits beendet.");
+    }
+}
 
 
 // Buttons
@@ -133,6 +146,14 @@ JButton uploadButton = new JButton("Lösung hochladen");
 Style.styleButton(uploadButton);
 JButton startButton = new JButton("Prüfung starten");
 Style.styleButton(startButton);
+
+if (aktuellePruefung != null) {
+
+    if (!aktuellePruefung.getStatus().equals("GESTARTET")) {
+
+        startButton.setEnabled(false);
+    }
+}
 
 // Timer-Variable
 
@@ -243,8 +264,8 @@ topButtonPanel.add(startButton);
 topButtonPanel.add(uploadButton);
 
 
-buttonPanel.add(topButtonPanel, BorderLayout.NORTH);
-buttonPanel.add(timerLabel, BorderLayout.CENTER);
+buttonPanel.add(topButtonPanel, BorderLayout.CENTER);
+buttonPanel.add(timerLabel, BorderLayout.NORTH);
 timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
 JPanel userPanel = new JPanel( new FlowLayout( FlowLayout.LEFT));
@@ -266,6 +287,10 @@ pruefungPanel.add(Box.createVerticalStrut(10));
 pruefungPanel.add(pruefungNameLabel);
 pruefungPanel.add(pruefungDatumLabel);
 pruefungPanel.add(pruefungDauerLabel);
+pruefungPanel.add(Box.createVerticalStrut(20));
+pruefungPanel.add(infoLabel);
+
+infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 JPanel centerPanel = new JPanel(new BorderLayout());
 

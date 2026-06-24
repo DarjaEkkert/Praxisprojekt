@@ -21,22 +21,20 @@ public class UserService {
         userRepository = new UserRepository(databaseManager);
 }
 
-    public User login(String username,
-                      String password) {
+public User login(String username,
+                  String password) {
 
-        User user =
-        userRepository
-                .getUserByUsername(
-                        username);
+    User user =
+            userRepository.getUserByUsername(username);
 
-        if (user != null
-                && user.getPassword()
-                    .equals(password)) {
-            databaseManager.disconnect();
-            return user;
-        }
+    databaseManager.disconnect();
 
-        databaseManager.disconnect();
-        return null;
+    if (user != null
+            && user.getPassword().equals(password)) {
+
+        return user;
     }
+
+    return null;
+}
 }

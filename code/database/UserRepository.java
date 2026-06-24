@@ -16,8 +16,7 @@ public class UserRepository {
         this.databaseManager = databaseManager;
     }
 
-    public User getUserByUsername(
-        String username) {
+    public User getUserByUsername( String username) {
 
     try {
 
@@ -39,20 +38,20 @@ public class UserRepository {
 
         if (result.next()) {
 
-            String password =
-                    result.getString(
-                            "password");
+                String password = result.getString( "password");
 
-            Role role =
-                    Role.valueOf(
-                            result.getString(
-                                    "role"));
+                Role role = Role.valueOf( result.getString( "role"));
+                String vorname = result.getString("vorname");
+
+                String nachname = result.getString("nachname");
 
             return new User(
-                    username,
-                    password,
-                    role);
-        }
+                username,
+                password,
+                role,
+                vorname,
+                nachname);
+                }
 
     } catch (Exception e) {
 
@@ -67,8 +66,8 @@ public void saveUser(User user) {
     try {
 
         String sql =
-                "INSERT INTO users(username, password, role) "
-                + "VALUES (?, ?, ?)";
+                "INSERT INTO users(username, password, role, vorname, nachname) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         PreparedStatement statement =
                 databaseManager
@@ -86,6 +85,13 @@ public void saveUser(User user) {
         statement.setString(
                 3,
                 user.getRole().name());
+        statement.setString(
+                4,
+                user.getVorname());
+
+        statement.setString(
+                5,
+                user.getNachname());
 
         statement.executeUpdate();
 
@@ -94,4 +100,5 @@ public void saveUser(User user) {
         e.printStackTrace();
     }
 }
+
 }

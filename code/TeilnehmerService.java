@@ -1,4 +1,5 @@
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Random;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -6,6 +7,7 @@ import database.DatabaseManager;
 import database.PruefungsteilnehmerRepository;
 import database.UserRepository;
 import model.User;
+import service.PdfService;
 import model.Role;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
@@ -13,6 +15,7 @@ public class TeilnehmerService {
 
     public static void leseTeilnehmerliste(String dateipfad, int pruefungId) {
 
+            ArrayList<User> teilnehmer = new ArrayList<>();
         try {
 
             FileInputStream file = new FileInputStream(dateipfad);
@@ -55,12 +58,18 @@ public class TeilnehmerService {
                     new User(
                         username,
                         passwort,
-                        Role.STUDENT);
+                        Role.STUDENT,
+                        vorname,
+                        nachname);
 
                 userRepository.saveUser(user);
+                teilnehmer.add(user);
 
                 teilnehmerRepository.saveTeilnehmer(pruefungId, username);
             }
+
+            //PdfService pdfService = new PdfService();
+
             workbook.close();
             file.close();
             db.disconnect();

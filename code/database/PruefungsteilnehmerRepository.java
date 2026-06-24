@@ -1,6 +1,9 @@
 package database;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class PruefungsteilnehmerRepository {
 
@@ -73,4 +76,37 @@ public int getPruefungIdByUsername(
 
     return -1;
 } 
+public ArrayList<String> getTeilnehmerByPruefungId(int pruefungId) {
+
+    ArrayList<String> teilnehmer = new ArrayList<>();
+
+    try {
+
+        String sql =
+                "SELECT username FROM pruefungsteilnehmer "
+                + "WHERE pruefung_id = ?";
+
+        PreparedStatement statement =
+                databaseManager
+                        .getConnection()
+                        .prepareStatement(sql);
+
+        statement.setInt(1, pruefungId);
+
+        ResultSet result =
+                statement.executeQuery();
+
+        while (result.next()) {
+
+            teilnehmer.add(
+                    result.getString("username"));
+        }
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+
+    return teilnehmer;
+}
 }

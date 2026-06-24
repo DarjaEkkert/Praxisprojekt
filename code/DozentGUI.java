@@ -9,7 +9,9 @@ import database.DatabaseManager;
 import database.PruefungsRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 import model.Pruefung;
+import service.PdfService;
 
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class DozentGUI {
         JLabel userLabel =
                 new JLabel(
                         "Angemeldet als: "
-                                + CurrentUser.getCurrentUser().getUsername()
+                                + CurrentUser.getCurrentUser().getVollerName()
                                 + " ("
                                 + CurrentUser.getCurrentUser().getRole()
                                 + ")");
@@ -96,6 +98,7 @@ public class DozentGUI {
 
         List<Pruefung> pruefungen =
                 repository.getAllPruefungen();
+        db.disconnect();
                 
 //prüfungen nach Datum sortieren
         pruefungen.sort((p1, p2) -> {
@@ -195,7 +198,74 @@ public class DozentGUI {
         JButton ergebnisseButton = new JButton("Ergebnisse ansehen");
 
         JButton studentenButton = new JButton("Studenten verwalten");
-        
+        JButton zugangsdatenButton =  new JButton("Zugangsdaten erstellen");
+
+        zugangsdatenButton.addActionListener(e -> {
+                DatabaseManager pdfDb = new DatabaseManager();
+                pdfDb.connect();
+
+                PruefungsRepository pdfRrepository = new PruefungsRepository(db);
+
+                int pruefungId = pdfRrepository.getLetztePruefungId();
+
+                PdfService pdfService = new PdfService();
+
+                pdfService.createZugangsdatenPdf(pruefungId);
+
+                pdfDb.disconnect();
+        });
+
+        JButton statusButton =  new JButton("Prüfung starten");
+
+        Pruefung letztePruefung =
+                repository.getPruefungById(
+                        repository.getLetztePruefungId());
+
+                if (letztePruefung != null
+                         && letztePruefung.getStatus().equals("GESTARTET")) {
+
+                statusButton.setText("Prüfung beenden");
+        }
+statusButton.addActionListener(e -> {
+
+    DatabaseManager pdfDb = new DatabaseManager();
+
+    pdfDb.connect();
+
+    PruefungsRepository pdfRepository = new PruefungsRepository(pdfDb);
+
+    int pruefungId = pdfRepository.getLetztePruefungId();
+
+    Pruefung pruefung = pdfRepository.getPruefungById(pruefungId);
+
+    if (pruefung.getStatus().equals("GEPLANT")) {
+
+        pdfRepository.updateStatus(
+                pruefungId,
+                "GESTARTET");
+
+        statusButton.setText(
+                "Prüfung beenden");
+
+        JOptionPane.showMessageDialog(
+                frame,
+                "Prüfung gestartet.");
+
+    } else if (pruefung.getStatus().equals("GESTARTET")) {
+
+        pdfRepository.updateStatus(
+                pruefungId,
+                "BEENDET");
+
+        statusButton.setEnabled(false);
+
+        JOptionPane.showMessageDialog(
+                frame,
+                "Prüfung beendet.");
+    }
+
+    pdfDb.disconnect();
+});
 
         JLabel actionLabel = new JLabel("Dozentenfunktionen");
         actionLabel.setFont(Style.TITLE_FONT);
@@ -213,6 +283,8 @@ public class DozentGUI {
         Style.styleButton(pruefungButton);
         Style.styleButton(ergebnisseButton);
         Style.styleButton(studentenButton);
+        Style.styleButton(zugangsdatenButton);
+        Style.styleButton(statusButton);
         
         rightPanel.add(Box.createVerticalStrut(50));
         rightPanel.add(actionLabel);
@@ -222,6 +294,10 @@ public class DozentGUI {
         rightPanel.add(ergebnisseButton);
         rightPanel.add(Box.createVerticalStrut(20));
         rightPanel.add(studentenButton);
+        rightPanel.add(Box.createVerticalStrut(20));
+        rightPanel.add(zugangsdatenButton);
+        rightPanel.add(Box.createVerticalStrut(20));
+        rightPanel.add(statusButton);
 
         
         // SplitPane

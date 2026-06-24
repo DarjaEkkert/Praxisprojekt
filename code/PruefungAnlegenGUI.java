@@ -128,7 +128,8 @@ speichernButton.addActionListener(e -> {
                 Integer.parseInt(dauerField.getText()),
                 aufgabenPfad,
                 loesungsPfad,
-                teilnehmerPfad);
+                teilnehmerPfad,
+        "GEPLANT");
 
         DatabaseManager db = new DatabaseManager();
 
@@ -138,14 +139,15 @@ speichernButton.addActionListener(e -> {
                 new PruefungsRepository(db);
 
         repository.savePruefung(pruefung);
-
+System.out.println("SAVE OK");
         int pruefungId = repository.getLetztePruefungId();
-
+System.out.println("ID = " + pruefungId);
         db.disconnect();
+System.out.println("STARTE TEILNEHMERIMPORT");
         TeilnehmerService.leseTeilnehmerliste(
                 teilnehmerPfad,
                 pruefungId);
-        
+        System.out.println("TEILNEHMERIMPORT FERTIG");
 
         nameField.setText("");
         dateField.setText("");
@@ -165,6 +167,8 @@ speichernButton.addActionListener(e -> {
         JOptionPane.showMessageDialog(
                 frame,
                 "Prüfung gespeichert!");
+
+                
 
     } catch (Exception ex) {
 

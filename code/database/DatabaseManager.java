@@ -58,12 +58,14 @@ public class DatabaseManager {
                 connection.createStatement();
 
         String sql =
-                "CREATE TABLE IF NOT EXISTS users ("
-                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "username TEXT NOT NULL,"
-                + "password TEXT NOT NULL,"
-                + "role TEXT NOT NULL"
-                + ");";
+            "CREATE TABLE IF NOT EXISTS users ("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + "username TEXT NOT NULL, "
+            + "password TEXT NOT NULL, "
+            + "role TEXT NOT NULL, "
+            + "vorname TEXT NOT NULL, "
+            + "nachname TEXT NOT NULL"
+            + ");";
 
         statement.execute(sql);
 
@@ -81,8 +83,8 @@ public void insertDefaultUsers() {
     try {
 
         String sql =
-                "INSERT INTO users(username, password, role) "
-                + "VALUES (?, ?, ?)";
+                "INSERT INTO users(username, password, role, vorname, nachname) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         PreparedStatement statement =
                 connection.prepareStatement(sql);
@@ -90,12 +92,16 @@ public void insertDefaultUsers() {
         statement.setString(1, "student");
         statement.setString(2, "1234");
         statement.setString(3, "STUDENT");
+        statement.setString(4, "Max");
+        statement.setString(5, "Mustermann");
 
         statement.executeUpdate();
 
         statement.setString(1, "dozent");
         statement.setString(2, "1234");
         statement.setString(3, "DOZENT");
+        statement.setString(4, "Anna");
+        statement.setString(5, "Musterfrau");
 
         statement.executeUpdate();
 
@@ -124,7 +130,8 @@ public void createPruefungTable() {
                 + "dauer INTEGER NOT NULL,"
                 + "aufgabenPfad TEXT NOT NULL,"
                 + "loesungsPfad TEXT NOT NULL,"
-                + "teilnehmerPfad TEXT NOT NULL"
+                + "teilnehmerPfad TEXT NOT NULL,"
+                + "status TEXT NOT NULL"
                 + ");";
 
         statement.execute(sql);

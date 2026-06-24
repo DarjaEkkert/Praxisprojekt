@@ -10,6 +10,7 @@ public class Pruefung {
     private String aufgabenPfad;
     private String loesungsPfad;
     private String teilnehmerPfad;
+    private String status;
 
     public Pruefung(
             int id,
@@ -19,7 +20,8 @@ public class Pruefung {
             int dauer,
             String aufgabenPfad,
             String loesungsPfad,
-            String teilnehmerPfad) {
+            String teilnehmerPfad,
+            String status) {
         this.id = id;
         this.name = name;
         this.datum = datum;
@@ -28,6 +30,7 @@ public class Pruefung {
         this.aufgabenPfad = aufgabenPfad;
         this.loesungsPfad = loesungsPfad;
         this.teilnehmerPfad = teilnehmerPfad;
+        this.status=status;
     }
 
     public int getId() {
@@ -59,5 +62,11 @@ public class Pruefung {
 
     public String getTeilnehmerPfad() {
         return teilnehmerPfad;
+    }
+    public String getStatus() {
+    return status;
+    }
+    public void setStatus(String status) {
+    this.status = status;
     }
 }

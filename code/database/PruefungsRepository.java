@@ -21,8 +21,8 @@ public class PruefungsRepository {
 
         String sql =
                 "INSERT INTO pruefungen "
-                + "(name, datum, gruppe, dauer, aufgabenPfad, loesungsPfad, teilnehmerPfad) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                + "(name, datum, gruppe, dauer, aufgabenPfad, loesungsPfad, teilnehmerPfad,status) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement statement =
                 databaseManager
@@ -37,6 +37,7 @@ public class PruefungsRepository {
         statement.setString(5, pruefung.getAufgabenPfad());
         statement.setString(6, pruefung.getLoesungsPfad());
         statement.setString(7, pruefung.getTeilnehmerPfad());
+        statement.setString(8, pruefung.getStatus());
 
         statement.executeUpdate();
 
@@ -48,6 +49,37 @@ public class PruefungsRepository {
         e.printStackTrace();
     }
 }
+
+public void updateStatus(
+            int pruefungId,
+            String status) {
+
+        try {
+
+            String sql =
+                    "UPDATE pruefungen "
+                    + "SET status = ? "
+                    + "WHERE id = ?";
+
+            PreparedStatement statement =
+                    databaseManager
+                            .getConnection()
+                            .prepareStatement(sql);
+
+            statement.setString(1, status);
+            statement.setInt(2, pruefungId);
+System.out.println(
+        "Status ändern für Prüfung "
+        + pruefungId
+        + " auf "
+        + status);
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
 
 public List<Pruefung> getAllPruefungen() {
 
@@ -78,7 +110,8 @@ public List<Pruefung> getAllPruefungen() {
                             result.getInt("dauer"),
                             result.getString("aufgabenPfad"),
                             result.getString("loesungsPfad"),
-                            result.getString("teilnehmerPfad"));
+                            result.getString("teilnehmerPfad"),
+                            result.getString("status"));
 
             pruefungen.add(pruefung);
         }
@@ -148,7 +181,8 @@ public Pruefung getPruefungById(
                     result.getInt("dauer"),
                     result.getString("aufgabenPfad"),
                     result.getString("loesungsPfad"),
-                    result.getString("teilnehmerPfad"));
+                    result.getString("teilnehmerPfad"),
+                    result.getString("status"));
         }
 
     } catch (Exception e) {
@@ -158,4 +192,5 @@ public Pruefung getPruefungById(
 
     return null;
 }
+
 }
