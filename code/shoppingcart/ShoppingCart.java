@@ -23,6 +23,10 @@ public class ShoppingCart {
 }
 public void removeItem(String item) {
 
+       if (item == null || item.isBlank()) {
+        return;
+    }
+
     items.remove(item);
 }
 }

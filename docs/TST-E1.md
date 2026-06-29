@@ -207,6 +207,14 @@ Als drittes Feature wurde das Entfernen eines Artikels umgesetzt. Zuerst wurde e
 
 Nach dem fehlgeschlagenen Test wurde die Methode removeItem() implementiert. Sie entfernt einen Artikel aus der Liste des Warenkorbs. Anschließend wurde der Test erneut ausgeführt und erfolgreich bestanden(GREEN).
 
+\#### REFACTOR
+
+
+
+Zum Abschluss wurde die Methode `removeItem()` verbessert. Vor dem Entfernen eines Artikels wird jetzt geprüft, ob der übergebene Wert `null` oder leer ist. Dadurch wird der Code robuster, ohne das Verhalten der bereits vorhandenen Funktionen zu verändern. Alle Tests wurden anschließend erneut erfolgreich ausgeführt.(REFACTOR)
+
+
+
 
 
 
