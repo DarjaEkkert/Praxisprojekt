@@ -23,4 +23,15 @@ void artikelKannHinzugefuegtWerden() {
 
     assertEquals(1, cart.getItemCount());
 }
+
+@Test
+void artikelKannEntferntWerden() {
+
+    ShoppingCart cart = new ShoppingCart();
+
+    cart.addItem("Buch");
+    cart.removeItem("Buch");
+
+    assertEquals(0, cart.getItemCount());
+}
 }

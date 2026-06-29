@@ -197,6 +197,16 @@ Zum Schluss wurde die Methode verbessert. Vor dem Hinzufügen eines Artikels wir
 
 
 
+\### Feature 3: Artikel entfernen
+
+
+
+Als drittes Feature wurde das Entfernen eines Artikels umgesetzt. Zuerst wurde ein Test geschrieben, der einen Artikel zum Warenkorb hinzufügt und anschließend wieder entfernt. Da die Methode `removeItem()` noch nicht vorhanden war, schlug der Test zunächst fehl (RED).
+
+
+
+
+
 
 
 
