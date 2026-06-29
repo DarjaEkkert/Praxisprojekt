@@ -14,4 +14,7 @@ public class ShoppingCart {
     public int getItemCount() {
         return items.size();
     }
+    public void addItem(String item) {
+    items.add(item);
+}
 }

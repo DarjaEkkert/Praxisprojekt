@@ -177,5 +177,23 @@ Anschließend wurde die Methode `getItemCount()` implementiert. Sie gibt die Anz
 
 
 
+\### Feature 2: Artikel hinzufügen
+
+
+
+Als nächstes wurde die Funktion zum Hinzufügen eines Artikels entwickelt.
+
+
+
+Zuerst wurde der Test `artikelKannHinzugefuegtWerden()` geschrieben. Der Test erwartet, dass nach dem Hinzufügen eines Artikels die Anzahl der Artikel im Warenkorb 1 beträgt.
+
+
+
+Da die Methode `addItem()` zu diesem Zeitpunkt noch nicht existierte, schlug der Test zunächst fehl (RED). Erst danach wird die Methode implementiert, damit der Test erfolgreich ausgeführt werden kann (GREEN).
+
+
+
+
+
 
 

@@ -14,7 +14,7 @@ void neuerWarenkorbIstLeer() {
     assertEquals(0, cart.getItemCount());
 }
 
-    @Test
+@Test
 void artikelKannHinzugefuegtWerden() {
 
     ShoppingCart cart = new ShoppingCart();
