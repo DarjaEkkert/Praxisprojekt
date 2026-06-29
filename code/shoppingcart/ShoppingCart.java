@@ -21,4 +21,8 @@ public class ShoppingCart {
         }
     items.add(item);
 }
+public void removeItem(String item) {
+
+    items.remove(item);
+}
 }

@@ -205,6 +205,10 @@ Als drittes Feature wurde das Entfernen eines Artikels umgesetzt. Zuerst wurde e
 
 
 
+Nach dem fehlgeschlagenen Test wurde die Methode removeItem() implementiert. Sie entfernt einen Artikel aus der Liste des Warenkorbs. Anschließend wurde der Test erneut ausgeführt und erfolgreich bestanden(GREEN).
+
+
+
 
 
 
