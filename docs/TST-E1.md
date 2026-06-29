@@ -193,6 +193,10 @@ Da die Methode `addItem()` zu diesem Zeitpunkt noch nicht existierte, schlug der
 
 
 
+Zum Schluss wurde die Methode verbessert. Vor dem Hinzufügen eines Artikels wird jetzt geprüft, ob der Artikel `null` oder leer ist. Dadurch wird verhindert, dass ungültige Einträge im Warenkorb gespeichert werden. Die vorhandenen Tests wurden erneut ausgeführt und waren weiterhin erfolgreich.(REFACTOR)
+
+
+
 
 
 

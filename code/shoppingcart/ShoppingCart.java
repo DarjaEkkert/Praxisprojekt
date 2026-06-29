@@ -15,6 +15,10 @@ public class ShoppingCart {
         return items.size();
     }
     public void addItem(String item) {
+
+        if (item == null || item.isBlank()) {
+            return;
+        }
     items.add(item);
 }
 }
