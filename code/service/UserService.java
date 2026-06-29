@@ -18,6 +18,13 @@ public class UserService {
 
         userRepository = new UserRepository(databaseManager);
 }
+// für tests
+public UserService(UserRepository userRepository,
+                   DatabaseManager databaseManager) {
+
+    this.userRepository = userRepository;
+    this.databaseManager = databaseManager;
+}
 
 public User login(String username,
                   String password) {

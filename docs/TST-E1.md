@@ -217,9 +217,15 @@ Zum Abschluss wurde die Methode `removeItem()` verbessert. Vor dem Entfernen ein
 
 
 
+\## A3 – Mocking
 
 
 
+Für den Mocking-Test wurde Mockito verwendet. Dabei wurde das `UserRepository` durch einen Mock ersetzt, sodass keine echte Verbindung zur SQLite-Datenbank aufgebaut werden muss.
+
+
+
+Ziel war es, die Login-Logik des `UserService` unabhängig von der Datenbank zu testen. Dadurch kann die Fachlogik isoliert überprüft werden, ohne auf externe Ressourcen angewiesen zu sein.
 
 
 
