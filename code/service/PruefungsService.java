@@ -4,16 +4,92 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.util.Iterator;
 
 import database.DatabaseManager;
 import database.PruefungsRepository;
 import model.Pruefung;
 
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.CellType;
 
 
 public class PruefungsService {
+
+private static void vergleicheArbeitsmappe(
+        XSSFWorkbook studentWorkbook,
+        XSSFWorkbook musterWorkbook) {
+
+    for (int i = 0;
+         i < musterWorkbook.getNumberOfSheets();
+         i++) {
+
+        XSSFSheet studentSheet =
+                studentWorkbook.getSheetAt(i);
+
+        XSSFSheet musterSheet =
+                musterWorkbook.getSheetAt(i);
+
+        System.out.println(
+                "\n--- Vergleiche Blatt: "
+                + musterSheet.getSheetName()
+                + " ---");
+
+        for (int zeile = 0;
+             zeile <= musterSheet.getLastRowNum();
+             zeile++) {
+
+            XSSFRow musterRow =
+                    musterSheet.getRow(zeile);
+
+            XSSFRow studentRow =
+                    studentSheet.getRow(zeile);
+
+            if (musterRow == null) {
+                continue;
+            }
+
+            if (studentRow == null) {
+                continue;
+            }
+
+            for (int spalte = 0;
+                 spalte < musterRow.getLastCellNum();
+                 spalte++) {
+
+                XSSFCell musterCell = musterRow.getCell(
+                    spalte,
+                    Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+
+                XSSFCell studentCell = studentRow == null
+                    ? null
+                    : studentRow.getCell(
+                        spalte,
+                    Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+
+                if (musterCell.getCellType() == CellType.BLANK
+                    && studentCell.getCellType() == CellType.BLANK) {
+
+                    continue;
+                }
+                CellType typ =
+                        musterCell.getCellType();
+
+                System.out.println(
+                        musterSheet.getSheetName()
+                        + " | Zeile "
+                        + zeile
+                        + " | Spalte "
+                        + spalte
+                        + " | Typ: "
+                        + typ);
+            }
+        }
+    }
+}
 
         public static void pruefeDatei(int pruefungId,String dateipfad) {
 
@@ -35,10 +111,22 @@ System.out.println(
         "Musterlösung: "
         + pruefung.getLoesungsPfad());
 
+
         try {
+            
+
+            FileInputStream musterDatei =  new FileInputStream(  pruefung.getLoesungsPfad());
+
+            XSSFWorkbook musterWorkbook = new XSSFWorkbook(musterDatei);
+            System.out.println(
+                        "Musterlösung erfolgreich geöffnet.");
             FileInputStream file = new FileInputStream(dateipfad);
 
             XSSFWorkbook workbook = new XSSFWorkbook(file);
+
+            vergleicheArbeitsmappe(
+                workbook,
+                musterWorkbook);
 
             XSSFSheet sheet1 = workbook.getSheetAt(0);
             XSSFSheet sheet2 = workbook.getSheetAt(1);
@@ -54,7 +142,13 @@ System.out.println(
 System.out.println("\n--- Blatt 1 Prüfung ---");
 
 
-if (pruefeZelle(sheet1, 1, 6, "SUM", 210, "Aufgabe 1")) {
+if (vergleicheFormel(
+        sheet1,
+        musterWorkbook.getSheetAt(0),
+        1,
+        6,
+        "Aufgabe 1")) {
+
     punkte++;
     aufgabe1 = 1;
 }
@@ -115,6 +209,8 @@ if (pruefeBlatt3(sheet3)) {
                 System.out.println("Prüfung nicht bestanden");
             }
 
+            musterWorkbook.close();
+            musterDatei.close();
             workbook.close();
             file.close();
 
@@ -155,6 +251,45 @@ if (pruefeBlatt3(sheet3)) {
     }
 }
 
+
+private static boolean vergleicheFormel(
+        XSSFSheet studentSheet,
+        XSSFSheet musterSheet,
+        int zeile,
+        int spalte,
+        String aufgabe) {
+
+    try {
+
+        String studentFormel =
+                studentSheet.getRow(zeile)
+                        .getCell(spalte)
+                        .getCellFormula();
+
+        String musterFormel =
+                musterSheet.getRow(zeile)
+                        .getCell(spalte)
+                        .getCellFormula();
+
+        if (studentFormel.equals(musterFormel)) {
+
+            System.out.println(
+                    aufgabe + " richtig");
+
+            return true;
+        }
+
+        System.out.println(
+                aufgabe + " falsch");
+
+    } catch (Exception e) {
+
+        System.out.println(
+                aufgabe + " konnte nicht geprüft werden");
+    }
+
+    return false;
+}
 public static boolean pruefeBlatt2(XSSFSheet sheet) {
 
     boolean aufgabe_ok = true;
