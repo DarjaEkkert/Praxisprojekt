@@ -25,6 +25,7 @@
         "c:\\Users\\Daria Ekkert\\Uni\\4. SS 26\\Praxisprojekt\\code\\lib\\poi-ooxml-full-5.2.3.jar",
         "c:\\Users\\Daria Ekkert\\Uni\\4. SS 26\\Praxisprojekt\\code\\lib\\poi-5.2.3.jar",
         "c:\\Users\\Daria Ekkert\\Uni\\4. SS 26\\Praxisprojekt\\code\\lib\\commons-logging-1.2.jar",
-        "c:\\Users\\Daria Ekkert\\Uni\\4. SS 26\\Praxisprojekt\\code\\lib\\jakarta.activation-2.0.1.jar"
+        "c:\\Users\\Daria Ekkert\\Uni\\4. SS 26\\Praxisprojekt\\code\\lib\\jakarta.activation-2.0.1.jar",
+        "code/lib/junit-platform-console-standalone-1.13.4.jar"
     ]
 }

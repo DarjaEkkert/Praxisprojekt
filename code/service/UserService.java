@@ -1,8 +1,6 @@
-import model.Role;
+package service;
+
 import model.User;
-
-import java.util.ArrayList;
-
 import database.DatabaseManager;
 import database.UserRepository;
 

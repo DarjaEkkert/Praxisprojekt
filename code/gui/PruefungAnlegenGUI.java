@@ -1,8 +1,12 @@
+package gui;
+
 import javax.swing.*;
+
 import java.awt.*;
 import database.DatabaseManager;
 import database.PruefungsRepository;
 import model.Pruefung;
+import service.TeilnehmerService;
 
 
 public class PruefungAnlegenGUI {

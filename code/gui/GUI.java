@@ -1,6 +1,8 @@
+package gui;
 import javax.swing.*;
 
 import model.CurrentUser;
+import service.PruefungsService;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -144,7 +146,7 @@ final int[] sekunden = {0};
                 
                 timer.stop();
 
-                Main.pruefeDatei(file.getAbsolutePath());
+                
                 infoLabel.setText("Lösung wurde hochgeladen.");
                 }
             }
