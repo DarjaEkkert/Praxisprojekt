@@ -104,3 +104,48 @@ A1: JUnit 5 als Testframework hinzugefügt
 
 
 
+
+\### Auswahl der Testklasse
+
+
+
+Für die Unit-Tests wurde die Klasse `PruefungsService` ausgewählt. Die Methoden `pruefeZelle()` und `pruefeBlatt3()` enthalten fachliche Prüfungslogik und können unabhängig von der grafischen Benutzeroberfläche getestet werden. Dadurch lassen sich verschiedene Eingaben gezielt überprüfen und die Rückgabewerte mit JUnit validieren.
+
+
+
+\##  Unit-Tests
+
+
+
+Für die Unit-Tests habe ich die Methode `pruefeBlatt3()` aus meinem Prüfungssystem ausgewählt. Diese Methode überprüft, ob ein Student die richtige Excel-Formel für die Berechnung der Versandkosten verwendet hat.
+
+
+
+Folgende Testfälle wurden mit JUnit umgesetzt:
+
+
+
+\* korrekte IF-Formel → Test erfolgreich
+
+\* falsche Formel (SUM statt IF) → Methode liefert `false`
+
+\* Zelle enthält Text statt Formel → `IllegalStateException`
+
+\* Formel steht in der falschen Zelle → `NullPointerException`
+
+\* alternative fachlich richtige Formel (`IF(A1<29.99,4.99,0)`) → wird von der aktuellen Implementierung nicht akzeptiert
+
+
+
+Während der Tests ist aufgefallen, dass die Methode nur eine bestimmte Schreibweise der Formel akzeptiert. Eine logisch gleichwertige Formel wird als falsch bewertet. Außerdem werden fehlende oder falsche Zelltypen derzeit nicht abgefangen, sondern führen zu Exceptions. Diese Tests helfen dabei, solche Schwachstellen frühzeitig zu erkennen.
+
+Git-Commit:
+
+```
+
+A1: Implementiere Unit-Tests für PruefungsService
+
+```
+
+
+
