@@ -165,5 +165,17 @@ Die Entwicklung erfolgt schrittweise. Nach jedem Schritt wird ein eigener Git-Co
 
 
 
+\### Feature 1: Neuer Warenkorb
+
+
+
+Der erste Test prüft, ob ein neu erstellter Warenkorb leer ist. Zuerst wurde nur der Test geschrieben. Da die Methode `getItemCount()` noch nicht existierte, war der Test zunächst rot (RED).
+
+
+
+Anschließend wurde die Methode `getItemCount()` implementiert. Sie gibt die Anzahl der Elemente im Warenkorb zurück. Danach war der Test erfolgreich (GREEN).
+
+
+
 
 

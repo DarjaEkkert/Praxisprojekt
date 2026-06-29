@@ -8,8 +8,10 @@ public class ShoppingCart {
     private List<String> items;
 
     public ShoppingCart() {
-
         items = new ArrayList<>();
     }
 
+    public int getItemCount() {
+        return items.size();
+    }
 }
