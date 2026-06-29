@@ -149,3 +149,21 @@ A1: Implementiere Unit-Tests für PruefungsService
 
 
 
+\## A2 – Shopping Cart (TDD)
+
+
+
+Für diese Aufgabe wurde ein einfacher Warenkorb entwickelt. Dabei wurde das Prinzip \*\*Test Driven Development (TDD)\*\* verwendet.
+
+
+
+Zuerst wurde ein Test geschrieben, der überprüft, ob ein neuer Warenkorb leer ist. Da die Methode `getItemCount()` zu diesem Zeitpunkt noch nicht existiert, schlägt der Test zunächst fehl (RED). Erst danach wird die Methode implementiert, sodass der Test erfolgreich ausgeführt werden kann (GREEN). Anschließend wird der Code bei Bedarf verbessert (REFACTOR).
+
+
+
+Die Entwicklung erfolgt schrittweise. Nach jedem Schritt wird ein eigener Git-Commit erstellt, damit die TDD-Vorgehensweise in der Git-History nachvollziehbar ist.
+
+
+
+
+
