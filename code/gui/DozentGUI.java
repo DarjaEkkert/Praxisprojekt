@@ -1,3 +1,4 @@
+package gui;
 import javax.swing.*;
 
 import model.CurrentUser;

@@ -2,8 +2,7 @@ package database;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 
 public class PruefungsteilnehmerRepository {
 

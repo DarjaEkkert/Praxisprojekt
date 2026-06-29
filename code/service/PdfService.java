@@ -14,7 +14,6 @@ import org.openpdf.text.Font;
 import org.openpdf.text.Image;
 import java.util.ArrayList;
 
-import model.Role;
 import model.User;
 import database.PruefungsRepository;
 import model.Pruefung;

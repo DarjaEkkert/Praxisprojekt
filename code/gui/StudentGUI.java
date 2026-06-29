@@ -1,4 +1,6 @@
+package gui;
 import javax.swing.*;
+
 import model.CurrentUser;
 import java.awt.*;
 import java.awt.event.*;
@@ -7,9 +9,8 @@ import database.DatabaseManager;
 import database.PruefungsRepository;
 import database.PruefungsteilnehmerRepository;
 import model.Pruefung;
-import java.util.List;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import service.PruefungsService;
+
 
 public class StudentGUI {
 
@@ -36,7 +37,7 @@ int pruefungId = teilnehmerRepository.getPruefungIdByUsername(username);
 Pruefung aktuellePruefung = repository.getPruefungById(pruefungId);
 
 final Pruefung finalePruefung = aktuellePruefung;
-
+db.disconnect();
 JLabel pruefungTitelLabel = new JLabel("Meine Prüfung");
 JLabel pruefungNameLabel = new JLabel();
 JLabel pruefungDatumLabel = new JLabel();
@@ -226,7 +227,7 @@ startButton.addActionListener(new ActionListener() {
                 
                 timer.stop();
 
-                Main.pruefeDatei(file.getAbsolutePath());
+                PruefungsService.pruefeDatei( finalePruefung.getId(),file.getAbsolutePath());
                 infoLabel.setText("Lösung wurde hochgeladen.");
                 }
             }
