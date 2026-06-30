@@ -143,11 +143,11 @@ speichernButton.addActionListener(e -> {
                 new PruefungsRepository(db);
 
         repository.savePruefung(pruefung);
-System.out.println("SAVE OK");
+
         int pruefungId = repository.getLetztePruefungId();
-System.out.println("ID = " + pruefungId);
+
         db.disconnect();
-System.out.println("STARTE TEILNEHMERIMPORT");
+
         TeilnehmerService.leseTeilnehmerliste(
                 teilnehmerPfad,
                 pruefungId);

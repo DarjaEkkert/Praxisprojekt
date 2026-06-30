@@ -60,5 +60,28 @@
 
 Das Prüfungssystem unterstützt nun personalisierte Benutzerkonten mit echten Namen, die automatische Erstellung von Zugangsdaten-PDFs sowie eine zentrale Prüfungsfreigabe durch den Dozenten. Studenten können Prüfungen erst nach Freigabe starten und erhalten abhängig vom aktuellen Prüfungsstatus entsprechende Rückmeldungen.
 
+## 30.06.2026 – Generische Bewertungsengine
+
+### Umgesetzte Funktionen
+
+- Die Bewertungslogik wurde von einer hartcodierten Klausurauswertung auf eine generische Vergleichslogik umgestellt.
+- Die Musterlösung wird anhand der in der Datenbank gespeicherten Prüfung geladen.
+- Studentenlösung und Musterlösung werden automatisch Blatt für Blatt verglichen.
+- Das System erkennt Aufgaben anhand der Aufgabenüberschriften in der Musterlösung.
+- Mehrere Formeln innerhalb einer Aufgabe werden zu einer gemeinsamen Aufgabenbewertung zusammengefasst.
+- Fehlerhafte Formeln werden mit Blatt, Zeile und Spalte ausgegeben.
+
+### Technische Umsetzung
+
+- Einführung der Methode `vergleicheArbeitsmappe()`.
+- Iteration über alle Arbeitsblätter, Zeilen und Zellen der Arbeitsmappe.
+- Dynamische Erkennung des Zelltyps (`FORMULA`, `STRING`, `NUMERIC`).
+- Einführung einer aufgabenbasierten Bewertungslogik mit den Variablen `aktuelleAufgabe`, `aktuelleAufgabeFehler`, `richtigeAufgaben` und `falscheAufgaben`.
+- Nutzung des in der Datenbank gespeicherten Pfads zur Musterlösung anstelle einer fest programmierten Datei.
+
+### Ergebnis
+
+Die Bewertungsengine ist nicht mehr auf eine einzelne Beispielklausur beschränkt. Neue Excel-Prüfungen können ohne Änderungen am Quellcode bewertet werden, sofern sie dieselbe Aufgabenstruktur verwenden. Die Auswertung erfolgt auf Aufgabenebene statt auf Zellebene und bildet damit den realen Bewertungsablauf deutlich besser ab.
+
 
 

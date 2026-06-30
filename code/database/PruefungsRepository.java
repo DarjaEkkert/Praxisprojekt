@@ -15,7 +15,7 @@ public class PruefungsRepository {
         this.databaseManager = databaseManager;
     }
 
-    public void savePruefung(Pruefung pruefung) {
+public void savePruefung(Pruefung pruefung) {
 
     try {
 

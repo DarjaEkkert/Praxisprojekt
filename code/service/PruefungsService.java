@@ -22,16 +22,21 @@ public class PruefungsService {
 private static void vergleicheArbeitsmappe(
         XSSFWorkbook studentWorkbook,
         XSSFWorkbook musterWorkbook) {
+        
+        int aktuelleAufgabe = 0;
+        int richtigeFormeln = 0;
+        int falscheFormeln = 0;
+        int richtigeAufgaben = 0;
+        int falscheAufgaben = 0;
 
+        boolean aktuelleAufgabeFehler = false;
+        boolean ersteAufgabe = true;
     for (int i = 0;
          i < musterWorkbook.getNumberOfSheets();
          i++) {
 
-        XSSFSheet studentSheet =
-                studentWorkbook.getSheetAt(i);
-
-        XSSFSheet musterSheet =
-                musterWorkbook.getSheetAt(i);
+        XSSFSheet studentSheet = studentWorkbook.getSheetAt(i);
+        XSSFSheet musterSheet = musterWorkbook.getSheetAt(i);
 
         System.out.println(
                 "\n--- Vergleiche Blatt: "
@@ -42,11 +47,8 @@ private static void vergleicheArbeitsmappe(
              zeile <= musterSheet.getLastRowNum();
              zeile++) {
 
-            XSSFRow musterRow =
-                    musterSheet.getRow(zeile);
-
-            XSSFRow studentRow =
-                    studentSheet.getRow(zeile);
+            XSSFRow musterRow = musterSheet.getRow(zeile);
+            XSSFRow studentRow = studentSheet.getRow(zeile);
 
             if (musterRow == null) {
                 continue;
@@ -60,8 +62,7 @@ private static void vergleicheArbeitsmappe(
                  spalte < musterRow.getLastCellNum();
                  spalte++) {
 
-                XSSFCell musterCell = musterRow.getCell(
-                    spalte,
+                XSSFCell musterCell = musterRow.getCell( spalte,
                     Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 
                 XSSFCell studentCell = studentRow == null
@@ -75,20 +76,87 @@ private static void vergleicheArbeitsmappe(
 
                     continue;
                 }
-                CellType typ =
-                        musterCell.getCellType();
+                CellType typ =  musterCell.getCellType();
 
-                System.out.println(
-                        musterSheet.getSheetName()
-                        + " | Zeile "
-                        + zeile
-                        + " | Spalte "
-                        + spalte
-                        + " | Typ: "
-                        + typ);
+                if (typ == CellType.STRING) {
+
+                    String text = musterCell.getStringCellValue().trim();
+
+                    if (text.matches("Aufgabe\\s+\\d+.*")) {
+
+                        if (!ersteAufgabe) {
+
+                            if (aktuelleAufgabeFehler) {
+
+                                falscheAufgaben++;
+
+                            } else {
+
+                                richtigeAufgaben++;
+                            }
+                        }
+
+                        ersteAufgabe = false;
+                        aktuelleAufgabeFehler = false;
+                        aktuelleAufgabe++;
+
+                        System.out.println(
+                            "\n--- Aufgabe "
+                            + aktuelleAufgabe
+                            + " ---");
+                    }
+                }
+
+                if (typ == CellType.FORMULA) {
+
+                String musterFormel =  musterCell.getCellFormula();
+
+                if (studentCell.getCellType() != CellType.FORMULA) {
+
+                    aktuelleAufgabeFehler = true;
+
+                continue;
+                }
+                String studentFormel = studentCell.getCellFormula();
+
+                if (musterFormel.equals(studentFormel)) {
+
+                    richtigeFormeln++;
+
+                } else {
+
+                    falscheFormeln++;
+                    aktuelleAufgabeFehler = true;
+                     System.out.println(
+                        "Falsche Formel in Blatt "
+                        + musterSheet.getSheetName()
+                        + ", Zeile "
+                        + (zeile + 1)
+                        + ", Spalte "
+                        + (spalte + 1));
+                    }
+
+                }
             }
         }
+
     }
+                                if (!ersteAufgabe) {
+
+                        if (aktuelleAufgabeFehler) {
+
+                            falscheAufgaben++;
+
+                        } else {
+
+                        richtigeAufgaben++;
+                        }
+                    }
+                    System.out.println();
+                    System.out.println("=================================");
+                    System.out.println("Richtige Aufgaben: " + richtigeAufgaben);
+                    System.out.println("Falsche Aufgaben: " + falscheAufgaben);
+                    System.out.println("=================================");
 }
 
         public static void pruefeDatei(int pruefungId,String dateipfad) {
