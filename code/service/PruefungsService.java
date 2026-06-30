@@ -5,10 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 import database.DatabaseManager;
 import database.PruefungsRepository;
 import model.Pruefung;
+import model.AufgabeErgebnis;
+import model.AufgabenStatus;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -31,6 +35,7 @@ private static int vergleicheArbeitsmappe(
 
         boolean aktuelleAufgabeFehler = false;
         boolean ersteAufgabe = true;
+        
     for (int i = 0;
          i < musterWorkbook.getNumberOfSheets();
          i++) {

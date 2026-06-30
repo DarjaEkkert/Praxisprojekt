@@ -224,11 +224,12 @@ startButton.addActionListener(new ActionListener() {
                 if (result == JFileChooser.APPROVE_OPTION) {
 
                 File file = chooser.getSelectedFile();
-                
-                timer.stop();
 
                 PruefungsService.pruefeDatei( finalePruefung.getId(),file.getAbsolutePath());
                 infoLabel.setText("Lösung wurde hochgeladen.");
+                uploadButton.setEnabled(false);
+                startButton.setEnabled(false);
+                timer.stop();
                 }
             }
         });

@@ -99,22 +99,25 @@ public List<Pruefung> getAllPruefungen() {
         ResultSet result =
                 statement.executeQuery();
 
-        while (result.next()) {
+while (result.next()) {
 
-            Pruefung pruefung =
-                    new Pruefung(
-                            result.getInt("id"),
-                            result.getString("name"),
-                            result.getString("datum"),
-                            result.getString("gruppe"),
-                            result.getInt("dauer"),
-                            result.getString("aufgabenPfad"),
-                            result.getString("loesungsPfad"),
-                            result.getString("teilnehmerPfad"),
-                            result.getString("status"));
+    Pruefung pruefung =
+            new Pruefung(
+                    result.getInt("id"),
+                    result.getString("name"),
+                    result.getString("datum"),
+                    result.getString("gruppe"),
+                    result.getInt("dauer"),
+                    result.getString("aufgabenPfad"),
+                    result.getString("loesungsPfad"),
+                    result.getString("teilnehmerPfad"),
+                    result.getString("status"));
 
-            pruefungen.add(pruefung);
-        }
+    pruefungen.add(pruefung);
+}
+
+result.close();
+statement.close();
 
     } catch (Exception e) {
 
@@ -139,10 +142,17 @@ public int getLetztePruefungId() {
         ResultSet result =
                 statement.executeQuery();
 
+        int id = -1;
+
         if (result.next()) {
 
-            return result.getInt("id");
+            id = result.getInt("id");
         }
+
+        result.close();
+        statement.close();
+
+        return id;
 
     } catch (Exception e) {
 
@@ -152,8 +162,7 @@ public int getLetztePruefungId() {
     return -1;
 }
 
-public Pruefung getPruefungById(
-        int id) {
+public Pruefung getPruefungById(int id) {
 
     try {
 
@@ -171,9 +180,11 @@ public Pruefung getPruefungById(
         ResultSet result =
                 statement.executeQuery();
 
+        Pruefung pruefung = null;
+
         if (result.next()) {
 
-            return new Pruefung(
+            pruefung = new Pruefung(
                     result.getInt("id"),
                     result.getString("name"),
                     result.getString("datum"),
@@ -184,6 +195,11 @@ public Pruefung getPruefungById(
                     result.getString("teilnehmerPfad"),
                     result.getString("status"));
         }
+
+        result.close();
+        statement.close();
+
+        return pruefung;
 
     } catch (Exception e) {
 

@@ -131,8 +131,7 @@ public class DozentGUI {
         JLabel geplanteLabel =
                 new JLabel("Geplante Prüfungen");
 
-        DefaultListModel<String> geplanteModel =
-                new DefaultListModel<>();
+        DefaultListModel<Pruefung> geplanteModel = new DefaultListModel<>();
 
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -157,15 +156,14 @@ public class DozentGUI {
 
                 } else {
 
-                        geplanteModel.addElement(eintrag);
+                        geplanteModel.addElement(pruefung);
                 }
         }
 
         JList<String> vergangeneListe =
                 new JList<>(vergangeneModel);
 
-        JList<String> geplanteListe =
-                new JList<>(geplanteModel);
+        JList<Pruefung> geplanteListe = new JList<>(geplanteModel);
 
         leftPanel.add(vergangeneLabel);
         leftPanel.add(new JScrollPane(vergangeneListe));
@@ -218,45 +216,53 @@ public class DozentGUI {
 
         JButton statusButton =  new JButton("Prüfung starten");
 
-        Pruefung letztePruefung =
+        /*Pruefung letztePruefung =
                 repository.getPruefungById(
                         repository.getLetztePruefungId());
+
 
                 if (letztePruefung != null
                          && letztePruefung.getStatus().equals("GESTARTET")) {
 
                 statusButton.setText("Prüfung beenden");
-        }
+        }*/
 statusButton.addActionListener(e -> {
+       
+        db.connect();
+        
+         Pruefung ausgewaehltePruefung = geplanteListe.getSelectedValue();
 
-    DatabaseManager pdfDb = new DatabaseManager();
+         if (ausgewaehltePruefung == null) {
 
-    pdfDb.connect();
+                JOptionPane.showMessageDialog(
+                frame,
+                 "Bitte wählen Sie zuerst eine Prüfung aus.");
 
-    PruefungsRepository pdfRepository = new PruefungsRepository(pdfDb);
+        return;
+        }
 
-    int pruefungId = pdfRepository.getLetztePruefungId();
+    int pruefungId = ausgewaehltePruefung.getId();
 
-    Pruefung pruefung = pdfRepository.getPruefungById(pruefungId);
+        if (ausgewaehltePruefung.getStatus().equals("GEPLANT")) {
 
-    if (pruefung.getStatus().equals("GEPLANT")) {
-
-        pdfRepository.updateStatus(
+        repository.updateStatus(
                 pruefungId,
                 "GESTARTET");
+        ausgewaehltePruefung.setStatus("GESTARTET");
 
         statusButton.setText(
                 "Prüfung beenden");
-
+        
         JOptionPane.showMessageDialog(
                 frame,
                 "Prüfung gestartet.");
 
-    } else if (pruefung.getStatus().equals("GESTARTET")) {
+    } else if (ausgewaehltePruefung.getStatus().equals("GESTARTET")) {
 
-        pdfRepository.updateStatus(
+        repository.updateStatus(
                 pruefungId,
                 "BEENDET");
+        ausgewaehltePruefung.setStatus("BEENDET");
 
         statusButton.setEnabled(false);
 
@@ -265,7 +271,7 @@ statusButton.addActionListener(e -> {
                 "Prüfung beendet.");
     }
 
-    pdfDb.disconnect();
+    db.disconnect();
 });
 
         JLabel actionLabel = new JLabel("Dozentenfunktionen");
@@ -318,4 +324,6 @@ statusButton.addActionListener(e -> {
 
         frame.setVisible(true);
     }
+
+
 }
