@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseManager;
+import database.ErgebnisRepository;
 import database.PruefungsRepository;
 import gui.ManuelleKorrekturGUI;
 import model.Pruefung;
 import model.AufgabeErgebnis;
 import model.AufgabenStatus;
+import model.CurrentUser;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -175,9 +177,26 @@ for (AufgabeErgebnis ergebnis : ergebnisse) {
     punkte += ergebnis.getPunkte();
 }
 
-    System.out.println("Gesamtpunkte: " + punkte);
     double prozent = (punkte / 11.0) * 100;
-    System.out.println("Ergebnis: " + prozent + "%");
+    
+db.connect();
+
+ErgebnisRepository ergebnisRepository =
+        new ErgebnisRepository(db);
+
+int ergebnisId =
+        ergebnisRepository.saveErgebnis(
+                pruefungId,
+                CurrentUser.getCurrentUser().getUsername(),
+                punkte,
+                prozent,
+                prozent >= 70);
+
+ergebnisRepository.saveAufgabeErgebnisse(
+        ergebnisId,
+        ergebnisse);
+
+db.disconnect();
 
             if (prozent >= 70) {
 

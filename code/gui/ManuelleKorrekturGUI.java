@@ -59,31 +59,21 @@ punkteField.setMaximumSize(Style.FIELD_SIZE);
 panel.add(punkteLabel);
 panel.add(punkteField);
 
-JButton speichernButton = new JButton("Speichern");
-
-Style.styleButton(speichernButton);
-
-speichernButton.addActionListener(e -> {
-
-    double punkte =
-            Double.parseDouble(punkteField.getText());
-
-    ManuelleKorrekturService.bewerteAufgabe(
-            aufgabe,
-            punkte);
-
-    statusLabel.setText("Status: " + aufgabe.getStatus());
-    punkteField.setText(String.valueOf(aufgabe.getPunkte()));
-
-    JOptionPane.showMessageDialog(
-            this,
-            "Punkte gespeichert.");
-});
 
 JButton weiterButton = new JButton("Nächste Aufgabe");
 Style.styleButton(weiterButton);
 
 weiterButton.addActionListener(e -> {
+
+    double punkte =
+        Double.parseDouble(punkteField.getText());
+
+    ManuelleKorrekturService.bewerteAufgabe(
+        aufgabe,
+        punkte);
+
+    statusLabel.setText(
+        "Status: " + aufgabe.getStatus());
 
     index++;
     while (index < ergebnisse.size()
@@ -131,7 +121,6 @@ punkteField.setText(
 
 panel.add(Box.createVerticalStrut(20));
 
-panel.add(speichernButton);
 panel.add(Box.createVerticalStrut(10));
 panel.add(weiterButton);
 

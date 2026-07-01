@@ -186,6 +186,8 @@ public class LoginGUI {
         db.createUserTable();
         db.createPruefungTable();
         db.createPruefungsteilnehmerTable();
+        db.createErgebnisTable();
+        db.createAufgabeErgebnisTable();
 
         db.disconnect();
 

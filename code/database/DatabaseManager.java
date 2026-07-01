@@ -168,4 +168,61 @@ public void createPruefungsteilnehmerTable() {
         e.printStackTrace();
     }
 }
+
+public void createErgebnisTable() {
+
+    try {
+
+        Statement statement =
+                connection.createStatement();
+
+        String sql =
+                "CREATE TABLE IF NOT EXISTS ergebnisse ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "pruefung_id INTEGER NOT NULL,"
+                + "username TEXT NOT NULL,"
+                + "gesamtpunkte REAL NOT NULL,"
+                + "prozent REAL NOT NULL,"
+                + "bestanden INTEGER NOT NULL"
+                + ");";
+
+        statement.execute(sql);
+
+        System.out.println(
+                "Tabelle ergebnisse erstellt.");
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+}
+public void createAufgabeErgebnisTable() {
+
+    try {
+
+        Statement statement =
+                connection.createStatement();
+
+        String sql =
+                "CREATE TABLE IF NOT EXISTS aufgabe_ergebnisse ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "ergebnis_id INTEGER NOT NULL,"
+                + "aufgabe_nummer INTEGER NOT NULL,"
+                + "status TEXT NOT NULL,"
+                + "punkte REAL NOT NULL,"
+                + "max_punkte REAL NOT NULL,"
+                + "kommentar TEXT,"
+                + "FOREIGN KEY(ergebnis_id) REFERENCES ergebnisse(id)"
+                + ");";
+
+        statement.execute(sql);
+
+        System.out.println(
+                "Tabelle aufgabe_ergebnisse erstellt.");
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+}
 }
