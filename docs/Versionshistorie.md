@@ -84,4 +84,24 @@ Das Prüfungssystem unterstützt nun personalisierte Benutzerkonten mit echten N
 Die Bewertungsengine ist nicht mehr auf eine einzelne Beispielklausur beschränkt. Neue Excel-Prüfungen können ohne Änderungen am Quellcode bewertet werden, sofern sie dieselbe Aufgabenstruktur verwenden. Die Auswertung erfolgt auf Aufgabenebene statt auf Zellebene und bildet damit den realen Bewertungsablauf deutlich besser ab.
 
 
+## 01.07.2026 – Vorbereitung der manuellen Korrektur
 
+### Umgesetzte Funktionen
+
+- Die Bewertungsengine wurde auf eine objektbasierte Ergebnisverwaltung umgestellt.
+- Für jede automatisch bewertete Aufgabe wird nun ein `AufgabeErgebnis` erzeugt.
+- Das System unterscheidet zwischen automatisch korrekt bewerteten Aufgaben und Aufgaben, die manuell geprüft werden müssen.
+- Die Gesamtpunktzahl wird nicht mehr während der Bewertung gezählt, sondern aus allen `AufgabeErgebnis`-Objekten berechnet.
+- Damit wurde die Grundlage für eine spätere manuelle Korrektur durch den Dozenten geschaffen.
+
+### Technische Umsetzung
+
+- Erweiterung der Klasse `AufgabeErgebnis` um die Attribute `punkte` und `maxPunkte`.
+- Anpassung der Methode `vergleicheArbeitsmappe()`, sodass sie eine `List<AufgabeErgebnis>` zurückliefert.
+- Einführung der Statuswerte `AUTOMATISCH_RICHTIG` und `MANUELL_PRUEFEN` innerhalb der Bewertungslogik.
+- Umstellung der Punkteberechnung auf Basis der erzeugten Ergebnisobjekte.
+- Bereinigung der Bewertungsengine durch Entfernen der bisherigen Aufgabenzähler und temporären Debug-Ausgaben.
+
+### Ergebnis
+
+Die Bewertungsengine liefert nun strukturierte Ergebnisse für jede einzelne Aufgabe. Dadurch können automatisch erkannte Problemfälle für eine spätere manuelle Korrektur markiert werden, ohne die bestehende automatische Bewertung zu verändern. Gleichzeitig wurde die Architektur der Bewertungsengine erweitert und für die nächsten Entwicklungsschritte vorbereitet.

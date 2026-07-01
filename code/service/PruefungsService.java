@@ -23,18 +23,17 @@ import org.apache.poi.ss.usermodel.CellType;
 
 public class PruefungsService {
 
-private static int vergleicheArbeitsmappe(
+private static List<AufgabeErgebnis> vergleicheArbeitsmappe(
         XSSFWorkbook studentWorkbook,
         XSSFWorkbook musterWorkbook) {
         
         int aktuelleAufgabe = 0;
         int richtigeFormeln = 0;
         int falscheFormeln = 0;
-        int richtigeAufgaben = 0;
-        int falscheAufgaben = 0;
-
         boolean aktuelleAufgabeFehler = false;
         boolean ersteAufgabe = true;
+        List<AufgabeErgebnis> ergebnisse = new ArrayList<>();
+        
         
     for (int i = 0;
          i < musterWorkbook.getNumberOfSheets();
@@ -42,11 +41,6 @@ private static int vergleicheArbeitsmappe(
 
         XSSFSheet studentSheet = studentWorkbook.getSheetAt(i);
         XSSFSheet musterSheet = musterWorkbook.getSheetAt(i);
-
-        System.out.println(
-                "\n--- Vergleiche Blatt: "
-                + musterSheet.getSheetName()
-                + " ---");
 
         for (int zeile = 0;
              zeile <= musterSheet.getLastRowNum();
@@ -87,29 +81,27 @@ private static int vergleicheArbeitsmappe(
 
                     String text = musterCell.getStringCellValue().trim();
 
-                    if (text.matches("Aufgabe\\s+\\d+.*")) {
+if (text.matches("Aufgabe\\s+\\d+.*")) {
 
-                        if (!ersteAufgabe) {
+    if (!ersteAufgabe) {
 
-                            if (aktuelleAufgabeFehler) {
+        ergebnisse.add(
+            new AufgabeErgebnis(
+                aktuelleAufgabe,
+                aktuelleAufgabeFehler
+                    ? AufgabenStatus.MANUELL_PRUEFEN
+                    : AufgabenStatus.AUTOMATISCH_RICHTIG,
+                aktuelleAufgabeFehler ? 0.0 : 1.0,
+                1.0,
+                "",
+                null));
+    }
 
-                                falscheAufgaben++;
+    ersteAufgabe = false;
+    aktuelleAufgabeFehler = false;
+    aktuelleAufgabe++;
 
-                            } else {
-
-                                richtigeAufgaben++;
-                            }
-                        }
-
-                        ersteAufgabe = false;
-                        aktuelleAufgabeFehler = false;
-                        aktuelleAufgabe++;
-
-                        System.out.println(
-                            "\n--- Aufgabe "
-                            + aktuelleAufgabe
-                            + " ---");
-                    }
+}
                 }
 
                 if (typ == CellType.FORMULA) {
@@ -126,13 +118,6 @@ private static int vergleicheArbeitsmappe(
 
                     falscheFormeln++;
                     aktuelleAufgabeFehler = true;
-                     System.out.println(
-                        "Falsche Formel in Blatt "
-                        + musterSheet.getSheetName()
-                        + ", Zeile "
-                        + (zeile + 1)
-                        + ", Spalte "
-                        + (spalte + 1));
                     }
 
                 }
@@ -140,25 +125,24 @@ private static int vergleicheArbeitsmappe(
         }
 
     }
-    if (!ersteAufgabe) {
+if (!ersteAufgabe) {
 
-        if (aktuelleAufgabeFehler) {
-
-            falscheAufgaben++;
-
-        } else {
-
-            richtigeAufgaben++;
-                }
-    }
-    System.out.println();
-    System.out.println("=================================");
-    System.out.println("Richtige Aufgaben: " + richtigeAufgaben);
-    System.out.println("Falsche Aufgaben: " + falscheAufgaben);
-    System.out.println("=================================");
-
-   return richtigeAufgaben; 
+    ergebnisse.add(
+        new AufgabeErgebnis(
+            aktuelleAufgabe,
+            aktuelleAufgabeFehler
+                ? AufgabenStatus.MANUELL_PRUEFEN
+                : AufgabenStatus.AUTOMATISCH_RICHTIG,
+            aktuelleAufgabeFehler ? 0.0 : 1.0,
+            1.0,
+            "",
+            null));
 }
+
+
+   return ergebnisse; 
+}
+
 
 public static void pruefeDatei(int pruefungId,String dateipfad) {
 
@@ -171,40 +155,25 @@ public static void pruefeDatei(int pruefungId,String dateipfad) {
 
             db.disconnect();
 
- System.out.println(
-        "Prüfung: "
-        + pruefung.getName());
-
-System.out.println(
-        "Musterlösung: "
-        + pruefung.getLoesungsPfad());
-
         try {
 
             FileInputStream musterDatei =  new FileInputStream(  pruefung.getLoesungsPfad());
             XSSFWorkbook musterWorkbook = new XSSFWorkbook(musterDatei);
-            System.out.println(
-                        "Musterlösung erfolgreich geöffnet.");
             FileInputStream file = new FileInputStream(dateipfad);
-
             XSSFWorkbook workbook = new XSSFWorkbook(file);
 
-  int punkte = vergleicheArbeitsmappe(
-    workbook,
-    musterWorkbook);
+  List<AufgabeErgebnis> ergebnisse =
+        vergleicheArbeitsmappe(workbook, musterWorkbook);
+double punkte = 0;
+
+for (AufgabeErgebnis ergebnis : ergebnisse) {
+    punkte += ergebnis.getPunkte();
+}
 
     System.out.println("Gesamtpunkte: " + punkte);
     double prozent = (punkte / 11.0) * 100;
     System.out.println("Ergebnis: " + prozent + "%");
-           /* erstelleErgebnisExcel(
-                punkte,
-                prozent,
-                aufgabe1,
-                aufgabe2,
-                aufgabe3,
-                aufgabe4,
-                aufgabe5
-            );*/ 
+
             if (prozent >= 70) {
 
                 System.out.println("Prüfung bestanden");
