@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 import model.Pruefung;
 import service.PdfService;
+import service.PruefungsService;
 
 import java.util.List;
 
@@ -196,6 +197,20 @@ public class DozentGUI {
 
         JButton ergebnisseButton = new JButton("Ergebnisse ansehen");
 
+ergebnisseButton.addActionListener(e -> {
+
+    if (PruefungsService.getLetzteErgebnisse() == null) {
+
+        JOptionPane.showMessageDialog(
+                frame,
+                "Es liegen noch keine Bewertungsergebnisse vor.");
+
+        return;
+    }
+
+    new ManuelleKorrekturGUI(
+            PruefungsService.getLetzteErgebnisse());
+});
         JButton studentenButton = new JButton("Studenten verwalten");
         JButton zugangsdatenButton =  new JButton("Zugangsdaten erstellen");
 

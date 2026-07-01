@@ -43,7 +43,7 @@ public class AufgabeErgebnis {
         return punkte;
     }
 
-    public void setPunkte(int punkte) {
+    public void setPunkte(double punkte) {
         this.punkte = punkte;
     }
 

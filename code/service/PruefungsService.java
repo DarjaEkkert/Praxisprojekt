@@ -10,6 +10,7 @@ import java.util.List;
 
 import database.DatabaseManager;
 import database.PruefungsRepository;
+import gui.ManuelleKorrekturGUI;
 import model.Pruefung;
 import model.AufgabeErgebnis;
 import model.AufgabenStatus;
@@ -22,7 +23,8 @@ import org.apache.poi.ss.usermodel.CellType;
 
 
 public class PruefungsService {
-
+    private static List<AufgabeErgebnis> letzteErgebnisse;
+    
 private static List<AufgabeErgebnis> vergleicheArbeitsmappe(
         XSSFWorkbook studentWorkbook,
         XSSFWorkbook musterWorkbook) {
@@ -164,6 +166,9 @@ public static void pruefeDatei(int pruefungId,String dateipfad) {
 
   List<AufgabeErgebnis> ergebnisse =
         vergleicheArbeitsmappe(workbook, musterWorkbook);
+
+letzteErgebnisse = ergebnisse;
+
 double punkte = 0;
 
 for (AufgabeErgebnis ergebnis : ergebnisse) {
@@ -191,8 +196,12 @@ for (AufgabeErgebnis ergebnis : ergebnisse) {
         } catch (Exception e) {
             System.out.println("Fehler beim Lesen der Excel-Datei");
             e.printStackTrace();
-        }
-    }
+        }}
+
+public static List<AufgabeErgebnis> getLetzteErgebnisse() {
+    return letzteErgebnisse;
+}
+
  
 public static void erstelleErgebnisExcel(int punkte,
         double prozent,

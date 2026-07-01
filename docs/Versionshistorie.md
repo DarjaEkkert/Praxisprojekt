@@ -84,7 +84,7 @@ Das Prüfungssystem unterstützt nun personalisierte Benutzerkonten mit echten N
 Die Bewertungsengine ist nicht mehr auf eine einzelne Beispielklausur beschränkt. Neue Excel-Prüfungen können ohne Änderungen am Quellcode bewertet werden, sofern sie dieselbe Aufgabenstruktur verwenden. Die Auswertung erfolgt auf Aufgabenebene statt auf Zellebene und bildet damit den realen Bewertungsablauf deutlich besser ab.
 
 
-## 01.07.2026 – Vorbereitung der manuellen Korrektur
+## 01.07.2026 – Umsetzung der manuellen Korrektur
 
 ### Umgesetzte Funktionen
 
@@ -92,16 +92,23 @@ Die Bewertungsengine ist nicht mehr auf eine einzelne Beispielklausur beschränk
 - Für jede automatisch bewertete Aufgabe wird nun ein `AufgabeErgebnis` erzeugt.
 - Das System unterscheidet zwischen automatisch korrekt bewerteten Aufgaben und Aufgaben, die manuell geprüft werden müssen.
 - Die Gesamtpunktzahl wird nicht mehr während der Bewertung gezählt, sondern aus allen `AufgabeErgebnis`-Objekten berechnet.
-- Damit wurde die Grundlage für eine spätere manuelle Korrektur durch den Dozenten geschaffen.
+- Für die manuelle Nachkorrektur wurde eine eigene `ManuelleKorrekturGUI` entwickelt.
+- Es werden ausschließlich Aufgaben angezeigt, die den Status `MANUELL_PRUEFEN` besitzen.
+- Der Dozent kann für jede Aufgabe eine individuelle Punktzahl vergeben und den Bewertungsstatus aktualisieren.
+- Nach Abschluss der manuellen Korrektur werden die Gesamtpunktzahl sowie der prozentuale Prüfungserfolg automatisch neu berechnet.
+- Die manuelle Korrektur wurde in den Dozentenbereich integriert und kann über die Funktion **„Ergebnisse ansehen“** geöffnet werden.
 
 ### Technische Umsetzung
 
 - Erweiterung der Klasse `AufgabeErgebnis` um die Attribute `punkte` und `maxPunkte`.
 - Anpassung der Methode `vergleicheArbeitsmappe()`, sodass sie eine `List<AufgabeErgebnis>` zurückliefert.
-- Einführung der Statuswerte `AUTOMATISCH_RICHTIG` und `MANUELL_PRUEFEN` innerhalb der Bewertungslogik.
+- Einführung der Statuswerte `AUTOMATISCH_RICHTIG`, `MANUELL_PRUEFEN`, `MANUELL_RICHTIG` und `MANUELL_FALSCH`.
 - Umstellung der Punkteberechnung auf Basis der erzeugten Ergebnisobjekte.
+- Implementierung des `ManuelleKorrekturService` zur Verarbeitung der manuellen Bewertung und zur Berechnung der endgültigen Gesamtpunktzahl.
+- Entwicklung der `ManuelleKorrekturGUI` mit Navigation zwischen den zu prüfenden Aufgaben und Eingabe individueller Punktzahlen.
+- Integration der manuellen Korrektur in die `DozentGUI` über den Button **„Ergebnisse ansehen“**.
 - Bereinigung der Bewertungsengine durch Entfernen der bisherigen Aufgabenzähler und temporären Debug-Ausgaben.
 
 ### Ergebnis
 
-Die Bewertungsengine liefert nun strukturierte Ergebnisse für jede einzelne Aufgabe. Dadurch können automatisch erkannte Problemfälle für eine spätere manuelle Korrektur markiert werden, ohne die bestehende automatische Bewertung zu verändern. Gleichzeitig wurde die Architektur der Bewertungsengine erweitert und für die nächsten Entwicklungsschritte vorbereitet.
+Die Bewertungsengine liefert nun strukturierte Ergebnisse für jede einzelne Aufgabe. Automatisch erkannte Problemfälle werden gezielt für eine manuelle Nachkorrektur markiert, ohne die bestehende automatische Bewertung zu verändern. Der Dozent kann diese Aufgaben einzeln bewerten und individuelle Punktzahlen vergeben. Nach Abschluss der manuellen Korrektur werden die Gesamtpunktzahl sowie der prozentuale Prüfungserfolg automatisch neu berechnet. Dadurch wurde die Bewertungslogik von einer rein automatischen Auswertung zu einem vollständigen Bewertungsprozess aus automatischer und manueller Korrektur erweitert.
