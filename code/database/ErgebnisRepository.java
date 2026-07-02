@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.util.List;
 import model.AufgabeErgebnis;
 import model.AufgabenStatus;
+import model.Ergebnis;
 public class ErgebnisRepository {
 
     private DatabaseManager db;
@@ -175,14 +176,10 @@ public void updateAufgabeErgebnis(
         statement.setInt(
                 5,
                 aufgabe.getNummer());
-System.out.println("UPDATE wird ausgeführt...");
+
         statement.executeUpdate();
 
     } catch (Exception e) {
-
-    System.out.println("Fehler beim Update Aufgabe:");
-    System.out.println("ergebnisId = " + ergebnisId);
-    System.out.println("aufgabe = " + aufgabe.getNummer());
 
     e.printStackTrace();
 }
@@ -223,6 +220,44 @@ public ArrayList<String> getStudentenByPruefung(
     return studenten;
 }
 
+public ArrayList<Ergebnis> getErgebnisseByPruefung(
+        int pruefungId) {
+
+    ArrayList<Ergebnis> ergebnisse =
+            new ArrayList<>();
+
+    try {
+
+        String sql =
+                "SELECT username, prozent, bestanden "
+                + "FROM ergebnisse "
+                + "WHERE pruefung_id = ?";
+
+        PreparedStatement statement =
+                db.getConnection().prepareStatement(sql);
+
+        statement.setInt(1, pruefungId);
+
+        ResultSet result =
+                statement.executeQuery();
+
+        while (result.next()) {
+
+            ergebnisse.add(
+                    new Ergebnis(
+                            result.getString("username"),
+                            result.getDouble("prozent"),
+                            result.getInt("bestanden") == 1));
+        }
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+
+    return ergebnisse;
+}
+
 public int getErgebnisId(
         int pruefungId,
         String username) {
@@ -255,5 +290,36 @@ public int getErgebnisId(
     }
 
     return -1;
+}
+
+public void updateGesamtergebnis(
+        int ergebnisId,
+        double gesamtpunkte,
+        double prozent,
+        boolean bestanden) {
+
+    try {
+
+        String sql =
+                "UPDATE ergebnisse "
+                + "SET gesamtpunkte = ?, "
+                + "prozent = ?, "
+                + "bestanden = ? "
+                + "WHERE id = ?";
+
+        PreparedStatement statement =
+                db.getConnection().prepareStatement(sql);
+
+        statement.setDouble(1, gesamtpunkte);
+        statement.setDouble(2, prozent);
+        statement.setInt(3, bestanden ? 1 : 0);
+        statement.setInt(4, ergebnisId);
+
+        statement.executeUpdate();
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
 }
 }

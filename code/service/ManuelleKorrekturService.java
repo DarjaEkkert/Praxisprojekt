@@ -31,4 +31,17 @@ public static double berechneGesamtpunkte(
 
     return gesamtpunkte;
 }
+
+public static double berechneMaxPunkte(
+        List<AufgabeErgebnis> ergebnisse) {
+
+    double maxPunkte = 0;
+
+    for (AufgabeErgebnis ergebnis : ergebnisse) {
+
+        maxPunkte += ergebnis.getMaxPunkte();
+    }
+
+    return maxPunkte;
+}
 }

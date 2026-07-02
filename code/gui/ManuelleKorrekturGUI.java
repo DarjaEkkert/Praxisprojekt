@@ -37,7 +37,15 @@ while (index < this.ergebnisse.size()
 
     index++;
 }
+if (index >= this.ergebnisse.size()) {
 
+    JOptionPane.showMessageDialog(
+            this,
+            "Für diesen Studenten sind keine manuellen Korrekturen erforderlich.");
+
+    dispose();
+    return;
+}
 aufgabe = this.ergebnisse.get(index);
 
 JPanel panel = new JPanel();
@@ -98,7 +106,7 @@ repository.updateAufgabeErgebnis(
         ergebnisId,
         aufgabe);
 
-db.disconnect();
+
 
     statusLabel.setText(
         "Status: " + aufgabe.getStatus());
@@ -116,8 +124,20 @@ if (index >= ergebnisse.size()) {
     double gesamtpunkte =
             ManuelleKorrekturService.berechneGesamtpunkte(ergebnisse);
 
-    double prozent =
-            (gesamtpunkte / 11.0) * 100;
+double maxPunkte =
+        ManuelleKorrekturService
+                .berechneMaxPunkte(ergebnisse);
+
+double prozent =
+        (gesamtpunkte / maxPunkte) * 100;
+
+        repository.updateGesamtergebnis(
+        ergebnisId,
+        gesamtpunkte,
+        prozent,
+        prozent >= 70);
+
+ db.disconnect();
 
     JOptionPane.showMessageDialog(
             this,

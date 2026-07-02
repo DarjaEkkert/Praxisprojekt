@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import java.util.*;
 
 import model.AufgabeErgebnis;
+import model.Ergebnis;
 import model.Pruefung;
 
 public class ErgebnisseGUI extends JFrame {
@@ -64,14 +65,14 @@ db.connect();
 ErgebnisRepository repository =
         new ErgebnisRepository(db);
 
-ArrayList<String> studenten =
-        repository.getStudentenByPruefung(
+ArrayList<Ergebnis> studenten =
+        repository.getErgebnisseByPruefung(
                 pruefung.getId());
 
 db.disconnect();
 
-JList<String> studentenListe =
-        new JList<>(studenten.toArray(new String[0]));
+JList<Ergebnis> studentenListe =
+        new JList<>(studenten.toArray(new Ergebnis[0]));
 
 JScrollPane scrollPane =
         new JScrollPane(studentenListe);
@@ -92,8 +93,8 @@ oeffnenButton.setAlignmentX(CENTER_ALIGNMENT);
 
 oeffnenButton.addActionListener(e -> {
 
-    String student =
-            studentenListe.getSelectedValue();
+    Ergebnis student =
+        studentenListe.getSelectedValue();
 
     if (student == null) {
 
@@ -112,18 +113,18 @@ oeffnenButton.addActionListener(e -> {
 
     int ergebnisId =
             ergebnisRepository.getErgebnisId(
-                    pruefung.getId(),
-                    student);
+        pruefung.getId(),
+        student.getUsername());
 
     java.util.List<AufgabeErgebnis> aufgaben =
         ergebnisRepository.getAufgabeErgebnisse(
                 ergebnisId);
 
     db.disconnect();
-    new ManuelleKorrekturGUI(
-            ergebnisId,
-            student,
-            aufgaben);
+new ManuelleKorrekturGUI(
+        ergebnisId,
+        student.getUsername(),
+        aufgaben);
 
     
 });

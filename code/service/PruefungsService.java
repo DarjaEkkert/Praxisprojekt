@@ -108,23 +108,31 @@ if (text.matches("Aufgabe\\s+\\d+.*")) {
 }
                 }
 
-                if (typ == CellType.FORMULA) {
+if (typ == CellType.FORMULA) {
 
-                String musterFormel =  musterCell.getCellFormula();
+    if (studentCell.getCellType() != CellType.FORMULA) {
 
-                String studentFormel = studentCell.getCellFormula();
+        falscheFormeln++;
+        aktuelleAufgabeFehler = true;
+        continue;
+    }
 
-                if (musterFormel.equals(studentFormel)) {
+    String musterFormel =
+            musterCell.getCellFormula();
 
-                    richtigeFormeln++;
+    String studentFormel =
+            studentCell.getCellFormula();
 
-                } else {
+    if (musterFormel.equals(studentFormel)) {
 
-                    falscheFormeln++;
-                    aktuelleAufgabeFehler = true;
-                    }
+        richtigeFormeln++;
 
-                }
+    } else {
+
+        falscheFormeln++;
+        aktuelleAufgabeFehler = true;
+    }
+}
             }
         }
 
