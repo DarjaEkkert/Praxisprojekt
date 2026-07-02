@@ -1,6 +1,10 @@
 package gui;
 
 import javax.swing.*;
+
+import database.DatabaseManager;
+import database.ErgebnisRepository;
+
 import java.awt.*;
 import java.util.List;
 import model.AufgabeErgebnis;
@@ -17,9 +21,14 @@ public class ManuelleKorrekturGUI extends JFrame {
     private JLabel statusLabel;
     private JTextField punkteField;
     private AufgabeErgebnis aufgabe;
+    private int ergebnisId;
     
-    public ManuelleKorrekturGUI(List<AufgabeErgebnis> ergebnisse) {
-        this.ergebnisse = ergebnisse;
+    public ManuelleKorrekturGUI(
+        int ergebnisId,
+        String student,
+        List<AufgabeErgebnis> ergebnisse){
+                this.ergebnisId = ergebnisId;
+                this.ergebnisse = ergebnisse;
 
 //nur falsche aufgaben anzeigen
 while (index < this.ergebnisse.size()
@@ -35,9 +44,16 @@ JPanel panel = new JPanel();
 panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 panel.setBackground(Style.BACKGROUND);
 
+JLabel studentLabel =
+        new JLabel("Student: " + student);
+
+Style.styleInfo(studentLabel);
         aufgabeLabel =
             new JLabel("Aufgabe: " + aufgabe.getNummer());
             Style.styleTitle(aufgabeLabel);
+
+panel.add(studentLabel);
+panel.add(Box.createVerticalStrut(15));
 
 panel.add(aufgabeLabel);
 
@@ -71,6 +87,18 @@ weiterButton.addActionListener(e -> {
     ManuelleKorrekturService.bewerteAufgabe(
         aufgabe,
         punkte);
+    
+        DatabaseManager db = new DatabaseManager();
+db.connect();
+
+ErgebnisRepository repository =
+        new ErgebnisRepository(db);
+
+repository.updateAufgabeErgebnis(
+        ergebnisId,
+        aufgabe);
+
+db.disconnect();
 
     statusLabel.setText(
         "Status: " + aufgabe.getStatus());

@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import database.DatabaseManager;
+import database.ErgebnisRepository;
 import database.PruefungsRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +17,7 @@ import service.PdfService;
 import service.PruefungsService;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class DozentGUI {
 
@@ -196,21 +198,39 @@ public class DozentGUI {
         );
 
         JButton ergebnisseButton = new JButton("Ergebnisse ansehen");
-
 ergebnisseButton.addActionListener(e -> {
 
-    if (PruefungsService.getLetzteErgebnisse() == null) {
+Pruefung pruefung = geplanteListe.getSelectedValue();
+
+if (pruefung == null) {
+
+    String eintrag = vergangeneListe.getSelectedValue();
+
+    if (eintrag != null) {
+
+        for (Pruefung p : pruefungen) {
+
+            if (eintrag.equals(p.toString())) {
+
+                pruefung = p;
+                break;
+            }
+        }
+    }
+}
+
+    if (pruefung == null) {
 
         JOptionPane.showMessageDialog(
                 frame,
-                "Es liegen noch keine Bewertungsergebnisse vor.");
+                "Bitte wählen Sie zuerst eine Prüfung aus.");
 
         return;
     }
 
-    new ManuelleKorrekturGUI(
-            PruefungsService.getLetzteErgebnisse());
+    new ErgebnisseGUI(pruefung);
 });
+
         JButton studentenButton = new JButton("Studenten verwalten");
         JButton zugangsdatenButton =  new JButton("Zugangsdaten erstellen");
 

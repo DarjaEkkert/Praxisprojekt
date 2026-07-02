@@ -112,3 +112,27 @@ Die Bewertungsengine ist nicht mehr auf eine einzelne Beispielklausur beschränk
 ### Ergebnis
 
 Die Bewertungsengine liefert nun strukturierte Ergebnisse für jede einzelne Aufgabe. Automatisch erkannte Problemfälle werden gezielt für eine manuelle Nachkorrektur markiert, ohne die bestehende automatische Bewertung zu verändern. Der Dozent kann diese Aufgaben einzeln bewerten und individuelle Punktzahlen vergeben. Nach Abschluss der manuellen Korrektur werden die Gesamtpunktzahl sowie der prozentuale Prüfungserfolg automatisch neu berechnet. Dadurch wurde die Bewertungslogik von einer rein automatischen Auswertung zu einem vollständigen Bewertungsprozess aus automatischer und manueller Korrektur erweitert.
+
+## 02.07.2026 – Speicherung der Korrekturergebnisse und Dozentenübersicht
+
+### Umgesetzte Funktionen
+
+- Für abgeschlossene Prüfungen wurde eine neue `ErgebnisseGUI` entwickelt.
+- Der Dozent erhält eine Übersicht aller Studenten, die eine Lösung zur ausgewählten Prüfung abgegeben haben.
+- Über den Button **„Korrektur öffnen“** kann die manuelle Nachkorrektur eines ausgewählten Studenten gestartet werden.
+- Die `ManuelleKorrekturGUI` wurde erweitert und zeigt zusätzlich den Namen des ausgewählten Studenten an.
+- Die manuelle Korrektur lädt ihre Daten nun vollständig aus der Datenbank und ist nicht mehr von den zuletzt berechneten Bewertungsergebnissen abhängig.
+- Änderungen der vergebenen Punkte und des Bewertungsstatus werden unmittelbar in der Datenbank gespeichert.
+
+### Technische Umsetzung
+
+- Entwicklung der neuen `ErgebnisseGUI` zur Auswahl abgegebener Studentenlösungen.
+- Implementierung neuer Repository-Methoden zum Laden der Prüfungsergebnisse und der aufgabenbezogenen Bewertungen aus der SQLite-Datenbank.
+- Erweiterung der Datenbankanbindung um das Speichern und erneute Laden einzelner `AufgabeErgebnis`-Objekte.
+- Implementierung einer `UPDATE`-Funktion zur dauerhaften Speicherung manueller Bewertungen in der Tabelle `aufgabe_ergebnisse`.
+- Übergabe der `ergebnisId` an die `ManuelleKorrekturGUI`, sodass Änderungen direkt dem entsprechenden Prüfungsergebnis zugeordnet werden können.
+- Umstellung des Korrekturablaufs von einer temporären Speicherlösung auf eine datenbankgestützte Verwaltung.
+
+### Ergebnis
+
+Der Dozent kann nun eine abgeschlossene Prüfung auswählen, die abgegebenen Studentenlösungen anzeigen und einzelne Prüfungen zur manuellen Nachkorrektur öffnen. Die Bewertungen werden nach der Korrektur dauerhaft in der SQLite-Datenbank gespeichert und können jederzeit erneut geladen werden. Dadurch wurde der Bewertungsprozess vollständig in die Datenbank integriert und die Grundlage für den anschließenden Export der endgültigen Prüfungsergebnisse geschaffen.
